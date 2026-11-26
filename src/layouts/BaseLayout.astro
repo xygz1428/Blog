@@ -44,7 +44,7 @@ const currentPath = stripBase(Astro.url.pathname);
     <script is:inline>
       (function () {
         try {
-          var saved = localStorage.getItem('Blog-theme');
+          var saved = localStorage.getItem('blog-theme');
           var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           var theme = saved || (prefersDark ? 'dark' : 'light');
           document.documentElement.setAttribute('data-theme', theme);
@@ -56,6 +56,7 @@ const currentPath = stripBase(Astro.url.pathname);
   </head>
 
   <body>
+    {isPost && <div class="reading-progress-bar" aria-hidden="true"><span id="progress-fill"></span></div>}
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={withBase('/')}>{SITE.title}</a>
@@ -94,6 +95,10 @@ const currentPath = stripBase(Astro.url.pathname);
       </div>
     </footer>
 
+    {isPost && (
+      <button class="scroll-to-top" id="scroll-top" type="button" aria-label="回到顶部">↑</button>
+    )}
+
     <script is:inline>
       (function () {
         var btn = document.getElementById('theme-toggle');
@@ -107,10 +112,67 @@ const currentPath = stripBase(Astro.url.pathname);
           btn.addEventListener('click', function () {
             var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             paint(next);
-            try { localStorage.setItem('Blog-theme', next); } catch (e) {}
+            try { localStorage.setItem('blog-theme', next); } catch (e) {}
           });
         }
       })();
+    </script>
+
+    <script>
+      // ── 阅读进度条 + 回到顶部 ────────────────────────────────
+      const fill = document.getElementById('progress-fill');
+      const topBtn = document.getElementById('scroll-top');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function onScroll() {
+        if (fill) {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const ratio = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+          fill.style.width = (ratio * 100).toFixed(2) + '%';
+        }
+        if (topBtn) topBtn.classList.toggle('is-visible', window.scrollY > 600);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      topBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+
+      // ── 代码块复制按钮 ──────────────────────────────────────
+      for (const pre of Array.from(document.querySelectorAll<HTMLPreElement>('pre.astro-code'))) {
+        if (pre.querySelector('.copy-btn')) continue;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'copy-btn';
+        button.textContent = '复制';
+        button.setAttribute('aria-label', '复制代码');
+
+        button.addEventListener('click', async () => {
+          const codeEl = pre.querySelector('code');
+          const code = codeEl?.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = '已复制';
+          } catch {
+            // 不安全上下文或旧浏览器：退回到手动选中
+            if (codeEl) {
+              const range = document.createRange();
+              range.selectNodeContents(codeEl);
+              const selection = window.getSelection();
+              selection?.removeAllRanges();
+              selection?.addRange(range);
+            }
+            button.textContent = '请手动复制';
+          }
+          window.setTimeout(() => {
+            button.textContent = '复制';
+          }, 1500);
+        });
+
+        pre.appendChild(button);
+      }
     </script>
   </body>
 </html>
