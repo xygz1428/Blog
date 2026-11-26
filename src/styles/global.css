@@ -1042,7 +1042,7 @@ pre.astro-code:hover .copy-btn,
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 21 / 9;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
@@ -1386,4 +1386,15 @@ pre.astro-code:hover .copy-btn,
 @media (prefers-reduced-motion: reduce) {
   .hero h1::after { animation: none; }
   .hero-tag { animation: none; }
+}
+/* ── 文章页顶部留白（参考 nathanchen.me 的 14vh 节奏）── */
+
+.post-layout {
+  padding-top: clamp(1rem, 3.5vw, 2.5rem);
+}
+
+@media (min-width: 1080px) {
+  .post-layout {
+    padding-top: clamp(1.5rem, 5vw, 4rem);
+  }
 }
