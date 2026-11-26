@@ -38,6 +38,8 @@ const imageDir = join(root, getFlag('outdir', 'src/content/blog/images'));
 const gifParam = gifOnly ? '&extension=gif' : '';
 const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial${gifParam}`;
 
+const rank = (lic) => ({ cc0: 0, pdm: 0, by: 1, 'by-sa': 2 }[lic] ?? 3);
+
 const res = await fetch(API, { headers: { 'User-Agent': 'kblog-image-fetcher' } });
 if (!res.ok) {
   console.error('检索失败 HTTP ' + res.status);
@@ -45,7 +47,7 @@ if (!res.ok) {
 }
 const data = await res.json();
 
-const allowed = new Set(cc0Only ? ['cc0'] : ['cc0', 'by']);
+const allowed = new Set(cc0Only ? ['cc0'] : ['cc0', 'by', 'by-sa', 'pdm']);
 const candidates = (data.results ?? [])
   .filter((item) => allowed.has(item.license))
   // 优先 CC0（无需署名），其次 CC BY
@@ -97,6 +99,23 @@ if (!existsSync(ledger)) {
 }
 const row = `| \`${fileName}\` | ${query} | ${item.title ?? '-'} | ${item.creator ?? '未知'} | ${item.license.toUpperCase()} ${item.license_version ?? ''} | ${item.source ?? '-'} | ${item.foreign_landing_url ?? item.url} |\n`;
 appendFileSync(ledger, row, 'utf8');
+
+// 供页面渲染署名用
+const creditsPath = join(root, 'src', 'data', 'image-credits.json');
+let credits = {};
+if (existsSync(creditsPath)) {
+  try { credits = JSON.parse(readFileSync(creditsPath, 'utf8')); } catch { credits = {}; }
+}
+credits[fileName] = {
+  title: item.title ?? '',
+  creator: item.creator ?? '',
+  license: item.license.toUpperCase(),
+  licenseVersion: item.license_version ?? '',
+  source: item.source ?? '',
+  landingUrl: item.foreign_landing_url ?? item.url,
+};
+mkdirSync(dirname(creditsPath), { recursive: true });
+writeFileSync(creditsPath, JSON.stringify(credits, null, 2) + '\n', 'utf8');
 
 console.log('已下载: ' + filePath);
 console.log('  体积: ' + (buffer.length / 1024).toFixed(0) + ' KB');

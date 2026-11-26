@@ -13,6 +13,7 @@
     "preview": "astro preview",
     "new": "node scripts/new-post.mjs",
     "translate": "node scripts/translate.mjs",
+    "wallpaper": "node scripts/fetch-wallpaper.mjs",
     "astro": "astro"
   },
   "dependencies": {

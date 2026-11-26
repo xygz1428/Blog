@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { t } from '../i18n/utils';
 import type { Locale } from '../i18n/ui';
+import creditsData from '../data/image-credits.json';
+import wallpaperData from '../data/daily-wallpaper.json';
 
 interface Props {
   locale: Locale;
@@ -11,63 +13,119 @@ interface Props {
 const { locale } = Astro.props;
 const dict = t(locale);
 
-// 图集图片：全部 CC0，来源见 docs/图片来源台账.md
+type Credit = {
+  title?: string;
+  creator?: string;
+  license?: string;
+  licenseVersion?: string;
+  source?: string;
+  landingUrl?: string;
+};
+
+const credits = creditsData as Record<string, Credit>;
+
 const modules = import.meta.glob<{ default: ImageMetadata }>('/src/assets/gallery/*.{jpg,jpeg,png,webp}', {
   eager: true,
 });
 
 const files = Object.entries(modules)
-  .map(([path, mod]) => ({
-    name: path.split('/').pop() ?? '',
-    src: mod.default,
-  }))
+  .map(([path, mod]) => {
+    const name = path.split('/').pop() ?? '';
+    return { name, src: mod.default, credit: credits[name] };
+  })
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const landscapes = files.filter((f) => f.name.startsWith('land-'));
+const landscapes = files.filter((f) => /^(land|nat)-/.test(f.name));
 const artworks = files.filter((f) => f.name.startsWith('art-'));
+const anime = files.filter((f) => f.name.startsWith('anime-'));
+
+/** 需要署名的许可：CC BY / CC BY-SA */
+function needsCredit(license?: string): boolean {
+  if (!license) return false;
+  return /^BY/.test(license.toUpperCase());
+}
+
+const copy = {
+  'zh-cn': {
+    landscapes: '风景',
+    artworks: '插画',
+    anime: '动漫',
+    credit: (c: Credit) => `图：${c.creator || '未署名'} / ${c.license}${c.licenseVersion ? ' ' + c.licenseVersion : ''}`,
+    note: '标有「图：」的图片采用 CC BY 系列许可，需署名；其余为 CC0 或公有领域，无需署名。完整来源与许可记录在仓库的「图片来源台账」中，如认为使用不当可联系删除。',
+    bingTitle: '必应壁纸',
+    bingNote: '以下壁纸由必应每日更新，版权归各摄影师所有。本站仅以热链接展示，不存储、不再分发；点击图片可跳转到必应查看原图与版权信息。',
+  },
+  en: {
+    landscapes: 'Landscapes',
+    artworks: 'Artworks',
+    anime: 'Anime',
+    credit: (c: Credit) => `Image: ${c.creator || 'unknown'} / ${c.license}${c.licenseVersion ? ' ' + c.licenseVersion : ''}`,
+    note: 'Images marked “Image:” are licensed under CC BY variants and require attribution; the rest are CC0 or public domain and need none. Full sources and licences are recorded in the repository ledger; contact us for removal if a use is inappropriate.',
+    bingTitle: 'Bing wallpapers',
+    bingNote: 'These wallpapers are updated daily by Bing and remain copyright of their photographers. This site only hotlinks them — nothing is stored or redistributed. Click through to Bing for the original and its copyright notice.',
+  },
+} as const;
+
+const c = copy[locale];
 ---
 
 <div class="page-head">
   <h1>{dict.navGallery}</h1>
-  <p>{dict.postCount(files.length)} · CC0</p>
+  <p>{dict.postCount(files.length)}</p>
 </div>
 
-<h2>风景</h2>
+{
+  [
+    { title: c.landscapes, items: landscapes },
+    { title: c.artworks, items: artworks },
+    { title: c.anime, items: anime },
+  ]
+    .filter((group) => group.items.length > 0)
+    .map((group) => (
+      <>
+        <h2>{group.title}</h2>
+        <div class="gallery-grid">
+          {group.items.map((item) => (
+            <figure class="gallery-item">
+              <Image
+                src={item.src}
+                alt={item.credit?.title ?? ''}
+                widths={[320, 640]}
+                sizes="(max-width: 640px) 50vw, 320px"
+                format="webp"
+                loading="lazy"
+              />
+              {item.credit && needsCredit(item.credit.license) && (
+                <figcaption class="gallery-credit">
+                  {item.credit.landingUrl ? (
+                    <a href={item.credit.landingUrl} target="_blank" rel="noopener noreferrer">
+                      {c.credit(item.credit)}
+                    </a>
+                  ) : (
+                    c.credit(item.credit)
+                  )}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </>
+    ))
+}
+
+<h2>{c.bingTitle}</h2>
+<p class="gallery-sub">{c.bingNote}</p>
 <div class="gallery-grid">
   {
-    landscapes.map((item) => (
+    (wallpaperData.items ?? []).slice(0, 8).map((item) => (
       <figure class="gallery-item">
-        <Image
-          src={item.src}
-          alt=""
-          widths={[320, 640]}
-          sizes="(max-width: 640px) 50vw, 320px"
-          format="webp"
-          loading="lazy"
-        />
+        <a href={item.link} target="_blank" rel="noopener noreferrer">
+          <img src={item.url} alt={item.title} loading="lazy" decoding="async" />
+        </a>
+        <figcaption class="gallery-credit">{item.copyright}</figcaption>
       </figure>
     ))
   }
 </div>
 
-<h2>插画</h2>
-<div class="gallery-grid">
-  {
-    artworks.map((item) => (
-      <figure class="gallery-item">
-        <Image
-          src={item.src}
-          alt=""
-          widths={[320, 640]}
-          sizes="(max-width: 640px) 50vw, 320px"
-          format="webp"
-          loading="lazy"
-        />
-      </figure>
-    ))
-  }
-</div>
-
-<p class="gallery-note">
-  所有图片均为 CC0 授权，可自由使用。来源记录在仓库的 <code>docs/图片来源台账.md</code>。
-</p>
+<p class="gallery-note">{c.note}</p>
