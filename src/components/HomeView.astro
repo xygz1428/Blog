@@ -4,7 +4,7 @@ import { SITE } from '../site.mjs';
 import { getAllPosts, getCategoryCounts, formatDate, postSlug } from '../utils/posts';
 import { getCover } from '../utils/covers';
 import { withBase } from '../utils/url';
-import { t, localizedHref } from '../i18n/utils';
+import { t, localizedHref, categoryLabel } from '../i18n/utils';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -19,6 +19,11 @@ const posts = await getAllPosts(locale);
 const latest = posts.slice(0, SITE.pageSize);
 const counts = await getCategoryCounts(locale);
 const heroCover = getCover('hero-quiet.jpg');
+
+// 非默认语言下只显示有文章的分类，避免一堆「0 posts」
+const visibleCategories = isDefault
+  ? SITE.categories
+  : SITE.categories.filter((category) => (counts[category] ?? 0) > 0);
 ---
 
 <section class="hero">
@@ -54,9 +59,9 @@ const heroCover = getCover('hero-quiet.jpg');
                 <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
                 <span>·</span>
                 {isDefault ? (
-                  <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+                  <a href={withBase(`/categories/${post.data.category}/`)}>{categoryLabel(locale, post.data.category)}</a>
                 ) : (
-                  <span>{post.data.category}</span>
+                  <span>{categoryLabel(locale, post.data.category)}</span>
                 )}
                 {post.data.tags.length > 0 && <span>·</span>}
                 {post.data.tags.map((tag) => (
@@ -84,16 +89,16 @@ const heroCover = getCover('hero-quiet.jpg');
 <h2>{dict.categories}</h2>
 <ul class="cat-grid">
   {
-    SITE.categories.map((category) => (
+    visibleCategories.map((category) => (
       <li>
         {isDefault ? (
           <a class="cat-card" href={withBase(`/categories/${category}/`)}>
-            <strong>{category}</strong>
+            <strong>{categoryLabel(locale, category)}</strong>
             <span>{dict.postCount(counts[category] ?? 0)}</span>
           </a>
         ) : (
           <div class="cat-card">
-            <strong>{category}</strong>
+            <strong>{categoryLabel(locale, category)}</strong>
             <span>{dict.postCount(counts[category] ?? 0)}</span>
           </div>
         )}

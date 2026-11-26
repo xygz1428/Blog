@@ -20,9 +20,21 @@ export const HTML_LANG: Record<Locale, string> = {
   'zh-tw': 'zh-TW',
 };
 
+/**
+ * 分类的显示名。
+ * 键必须与 src/site.mjs 的 categories 一致（也是 frontmatter 里的枚举值），
+ * 值是按语言展示的文案。
+ */
+export const CATEGORY_LABELS: Record<Locale, Record<string, string>> = {
+  'zh-cn': { 科研: '科研', 技术: '技术', 学习: '学习', 生活: '生活' },
+  en: { 科研: 'Research', 技术: 'Engineering', 学习: 'Learning', 生活: 'Life' },
+  'zh-tw': { 科研: '科研', 技术: '技術', 学习: '學習', 生活: '生活' },
+};
+
 export const ui = {
   'zh-cn': {
     siteTagline: '记录科研、技术、学习与生活',
+    siteDescription: 'Blog —— 一个用来记录科研、编程技术、学习笔记与生活随笔的个人博客。',
     navHome: '首页',
     navBlog: '文章',
     navArchive: '归档',
@@ -60,6 +72,7 @@ export const ui = {
   },
   en: {
     siteTagline: 'Notes on research, engineering, learning, and life',
+    siteDescription: 'A personal blog about research, engineering practice, study notes, and everyday thoughts.',
     navHome: 'Home',
     navBlog: 'Writing',
     navArchive: 'Archive',
@@ -97,6 +110,7 @@ export const ui = {
   },
   'zh-tw': {
     siteTagline: '記錄科研、技術、學習與生活',
+    siteDescription: 'Blog —— 一個用來記錄科研、程式技術、學習筆記與生活隨筆的個人部落格。',
     navHome: '首頁',
     navBlog: '文章',
     navArchive: '歸檔',

@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 import { getNeighbors, formatDate, readingTime, postSlug, type Post } from '../utils/posts';
 import { getCover } from '../utils/covers';
 import { withBase } from '../utils/url';
-import { t, localizedHref } from '../i18n/utils';
+import { t, localizedHref, categoryLabel } from '../i18n/utils';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -40,9 +40,9 @@ const cover = getCover(post.data.cover);
         {post.data.updatedDate && <span>（{dict.updatedAt} {formatDate(post.data.updatedDate)}）</span>}
         <span>·</span>
         {isDefault ? (
-          <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+          <a href={withBase(`/categories/${post.data.category}/`)}>{categoryLabel(locale, post.data.category)}</a>
         ) : (
-          <span>{post.data.category}</span>
+          <span>{categoryLabel(locale, post.data.category)}</span>
         )}
         <span>·</span>
         <span>{dict.readingTime(minutes)}</span>

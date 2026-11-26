@@ -19,13 +19,15 @@ interface Props {
 
 const {
   title,
-  description = SITE.description,
+  description,
   isPost = false,
   locale = DEFAULT_LOCALE,
   altPaths = {},
 } = Astro.props;
 
 const dict = t(locale);
+// 页面没传描述时，用当前语言的站点描述，避免英文页出现中文摘要
+const pageDescription = description ?? dict.siteDescription;
 const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${dict.siteTagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com');
 const currentPath = stripBase(Astro.url.pathname);
@@ -58,7 +60,7 @@ const isActive = (href: string) => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href={withBase('/rss.xml')} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
@@ -73,7 +75,7 @@ const isActive = (href: string) => {
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content={isPost ? 'article' : 'website'} />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:image" content={ogImage} />
@@ -83,7 +85,7 @@ const isActive = (href: string) => {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={pageDescription} />
 
     {
       /* 多语言页面互相声明 hreflang，只列真实存在的版本 */

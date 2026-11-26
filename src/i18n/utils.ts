@@ -1,8 +1,13 @@
-import { ui, DEFAULT_LOCALE, LOCALES, type Locale, type Dict } from './ui';
+import { ui, DEFAULT_LOCALE, LOCALES, CATEGORY_LABELS, type Locale, type Dict } from './ui';
 
 /** 取当前语言的文案字典 */
 export function t(locale: Locale): Dict {
   return (ui[locale] ?? ui[DEFAULT_LOCALE]) as Dict;
+}
+
+/** 分类显示名：frontmatter 里是中文键，展示时按语言翻译 */
+export function categoryLabel(locale: Locale, key: string): string {
+  return CATEGORY_LABELS[locale]?.[key] ?? key;
 }
 
 /** 生成带语言前缀的站内路径 */
