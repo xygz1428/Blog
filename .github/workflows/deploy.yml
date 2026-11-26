@@ -29,8 +29,13 @@ jobs:
           node-version: 22
           cache: npm
 
+      # 用 npm install 而不是 npm ci：
+      # 本项目依赖树里含平台相关的可选依赖（@emnapi/*，来自 Astro 的图像处理链）。
+      # 在 Windows 上生成的 lockfile 不含这些包在 Linux 下的实体条目，
+      # npm ci 的严格同步校验会在 Linux runner 上直接报 "Missing ... from lock file"。
+      # npm install 会按当前平台解析，代价是放弃 lockfile 的严格复现性。
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build site
         run: npm run build
