@@ -2,6 +2,8 @@
 import { SITE } from '../site.mjs';
 import { withBase, stripBase } from '../utils/url';
 import '../styles/global.css';
+// KaTeX 的排版样式（字体、间距、上下标）。不引入这行，公式会退化成无样式的字符。
+import 'katex/dist/katex.min.css';
 
 interface Props {
   title?: string;

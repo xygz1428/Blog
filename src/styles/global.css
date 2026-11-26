@@ -1,44 +1,48 @@
 /* ─────────────────────────────────────────────────────────────
    Blog 设计系统
-   学术风格：克制、重视阅读、无阴影无渐变
+   暖纸风格：米白纸面、墨色正文、赭橙强调；无阴影无渐变
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  /* 浅色（默认） */
-  --bg: #fdfdfc;
-  --bg-soft: #f6f6f4;
-  --fg: #1a1a1a;
-  --fg-muted: #5c5c5c;
-  --fg-faint: #8a8a8a;
-  --border: #e3e3df;
-  --border-strong: #cfcfc9;
-  --link: #1f5f9e;
-  --link-hover: #143f6b;
-  --accent: #7a1f2b;
-  --code-bg: #f4f4f1;
+  /* 浅色（默认）：暖纸 */
+  --bg: #f5f1ea;          /* 纸面 */
+  --bg-soft: #ece6dc;     /* 次级底 */
+  --bg-card: #fffdf9;     /* 卡片 */
+  --fg: #1f1b17;          /* 正文墨色 */
+  --fg-muted: #463f38;    /* 次级正文 */
+  --fg-faint: #6b635a;    /* 弱化信息 */
+  --border: #e8e1d6;
+  --border-strong: #ddd4c7;
+  --link: #a8431a;        /* 深一档赭红，保证纸面可读性 */
+  --link-hover: #e2672b;
+  --accent: #e2672b;      /* 强调色 */
+  --accent-soft: #f9e2d1; /* 强调浅底 */
+  --code-bg: #ece6dc;
 
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --sans: 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, 'Courier New', monospace;
 
   --measure: 44rem;      /* 正文行宽 */
-  --wide: 62rem;         /* 列表/页头宽度 */
+  --wide: 68rem;         /* 列表/页头宽度 */
   --radius: 4px;
 }
 
-/* 深色 */
+/* 深色：暖灰墨 */
 :root[data-theme='dark'] {
-  --bg: #14161a;
-  --bg-soft: #1b1e23;
+  --bg: #1c1a1f;
+  --bg-soft: #2a2730;
+  --bg-card: #242129;
   --fg: #d8dae0;
-  --fg-muted: #9aa0aa;
-  --fg-faint: #6d747f;
-  --border: #2a2e35;
-  --border-strong: #3a3f48;
-  --link: #7fb2e5;
-  --link-hover: #a8cdf0;
-  --accent: #d98a96;
-  --code-bg: #1d2026;
+  --fg-muted: #a9a4b0;
+  --fg-faint: #7d7887;
+  --border: #332f3a;
+  --border-strong: #454050;
+  --link: #eaa172;
+  --link-hover: #f5bb96;
+  --accent: #f08a52;
+  --accent-soft: #3a2a22;
+  --code-bg: #2a2730;
 }
 
 * { box-sizing: border-box; }
@@ -74,7 +78,7 @@ body {
 }
 
 main {
-  padding: 2.5rem 0 4rem;
+  padding: clamp(3rem, 6vw, 5rem) 0 4rem;
   min-height: 60vh;
 }
 
@@ -191,7 +195,7 @@ li { margin-bottom: 0.35rem; }
 blockquote {
   margin: 1.4rem 0;
   padding: 0.2rem 0 0.2rem 1rem;
-  border-left: 2px solid var(--border-strong);
+  border-left: 2px solid var(--accent);
   color: var(--fg-muted);
 }
 
@@ -216,7 +220,9 @@ code {
 }
 
 pre {
-  background: var(--code-bg) !important;
+  /* 不加 !important：Shiki 会在 <pre> 上内联自己的底色与文字色，
+     强制覆盖会让浅色语法色落到浅底上（旧版即存在的可读性问题） */
+  background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 0.9rem 1rem;
@@ -301,6 +307,7 @@ th { background: var(--bg-soft); font-weight: 600; }
   font-family: var(--sans);
   font-size: 0.75rem;
   color: var(--fg-muted);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.05rem 0.55rem;
@@ -357,6 +364,7 @@ th { background: var(--bg-soft); font-weight: 600; }
   display: block;
   text-decoration: none;
   color: inherit;
+  background: var(--bg-card);
 }
 
 .cat-card:hover { border-color: var(--border-strong); text-decoration: none; }
@@ -447,7 +455,7 @@ th { background: var(--bg-soft); font-weight: 600; }
   body { font-size: 16px; line-height: 1.75; }
   h1 { font-size: 1.55rem; }
   .hero h1 { font-size: 1.7rem; }
-  main { padding: 1.8rem 0 3rem; }
+  main { padding: 2rem 0 3rem; }
   .site-header .wrap { gap: 0.8rem; }
   .nav { margin-left: 0; width: 100%; font-size: 0.88rem; gap: 0.9rem; }
   .archive-list li { flex-wrap: wrap; gap: 0.4rem; }
