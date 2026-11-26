@@ -29,6 +29,8 @@ const getFlag = (name, fallback) => {
 
 const outName = getFlag('out', query.replace(/[^a-z0-9]+/gi, '-').toLowerCase());
 const pick = Number(getFlag('pick', '0'));
+// --cc0：只要 CC0（无需署名），用于避免署名义务
+const cc0Only = args.includes('--cc0');
 
 const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial`;
 
@@ -39,7 +41,7 @@ if (!res.ok) {
 }
 const data = await res.json();
 
-const allowed = new Set(['cc0', 'by']);
+const allowed = new Set(cc0Only ? ['cc0'] : ['cc0', 'by']);
 const candidates = (data.results ?? [])
   .filter((item) => allowed.has(item.license))
   // 优先 CC0（无需署名），其次 CC BY
