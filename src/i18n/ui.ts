@@ -72,6 +72,12 @@ export const ui = {
     statVisits: '次访问',
     statVisitors: '位访客',
     statPage: '本页阅读',
+    commentTitle: '留言',
+    commentNote: '留言基于 GitHub Discussions。你需要有 GitHub 账号，留言会同步到仓库的讨论区。',
+    commentPending: '留言功能待配置：需要在 site.mjs 填入 giscus 的 repoId 与 categoryId。',
+    commentStep1: '在仓库 Settings → General 里勾选 Discussions，新建一个名为 Comments 的分类。',
+    commentStep2: '打开 giscus.app，填入仓库名，按提示安装 giscus App。',
+    commentStep3: '把页面给出的 repoId 与 categoryId 填进 src/site.mjs，重新部署即可。',
   },
   en: {
     siteTagline: 'Notes on research, engineering, learning, and life',
@@ -116,6 +122,12 @@ export const ui = {
     statVisits: 'visits',
     statVisitors: 'visitors',
     statPage: 'on this page',
+    commentTitle: 'Comments',
+    commentNote: 'Comments are powered by GitHub Discussions. A GitHub account is required; they appear in the repository discussions.',
+    commentPending: 'Comments are not configured yet: add giscus repoId and categoryId to site.mjs.',
+    commentStep1: 'In the repo Settings → General, enable Discussions and create a category named Comments.',
+    commentStep2: 'Open giscus.app, enter the repo name and install the giscus app.',
+    commentStep3: 'Paste the repoId and categoryId into src/site.mjs and redeploy.',
   },
 } as const;
 

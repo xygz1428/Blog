@@ -1434,3 +1434,44 @@ pre.astro-code:hover .copy-btn,
 .footer-copy {
   font-family: var(--sans);
 }
+/* ── 留言区 ───────────────────────────────────────────── */
+
+.comments {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.comments h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.8rem;
+  border: none;
+  padding: 0;
+}
+
+.comments-note,
+.comments-pending p {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--fg-faint);
+  margin-bottom: 1rem;
+}
+
+.comments-pending {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  background: var(--bg-soft);
+}
+
+.comments-pending ol {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.comments-pending li {
+  margin-bottom: 0.35rem;
+}

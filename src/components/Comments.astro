@@ -1,0 +1,53 @@
+---
+import { SITE } from '../site.mjs';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const giscus = SITE.giscus;
+const configured = Boolean(giscus?.repoId && giscus?.categoryId);
+---
+
+<section class="comments" aria-label={dict.commentTitle}>
+  <h2>{dict.commentTitle}</h2>
+
+  {
+    configured ? (
+      <>
+        <p class="comments-note">{dict.commentNote}</p>
+        <script
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo={giscus.repo}
+          data-repo-id={giscus.repoId}
+          data-category={giscus.category}
+          data-category-id={giscus.categoryId}
+          data-mapping="pathname"
+          data-strict="1"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang={locale === 'en' ? 'en' : 'zh-CN'}
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        />
+      </>
+    ) : (
+      <div class="comments-pending">
+        <p>{dict.commentPending}</p>
+        <ol>
+          <li>{dict.commentStep1}</li>
+          <li>{dict.commentStep2}</li>
+          <li>{dict.commentStep3}</li>
+        </ol>
+      </div>
+    )
+  }
+</section>

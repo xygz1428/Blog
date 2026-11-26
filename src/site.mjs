@@ -5,7 +5,17 @@
  *   url  —— 你的站点地址
  *   base —— 用户主页仓库（<username>.github.io）填 '/'；项目仓库填 '/<repo>'
  */
+// 留言（giscus，基于 GitHub Discussions）
+// 填好下面四项后留言区自动启用，配置方法见 docs/留言配置.md
+const GISCUS = {
+  repo: 'xygz1428/Blog',
+  repoId: '',
+  category: 'Comments',
+  categoryId: '',
+};
+
 export const SITE = {
+  giscus: GISCUS,
   title: 'Blog',
   // 副标题会显示在首页与页脚
   tagline: '记录科研、技术、学习与生活',

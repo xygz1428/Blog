@@ -5,6 +5,7 @@ import { getNeighbors, formatDate, readingTime, postSlug, type Post } from '../u
 import { getCover } from '../utils/covers';
 import { withBase } from '../utils/url';
 import { t, localizedHref, categoryLabel } from '../i18n/utils';
+import Comments from './Comments.astro';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -56,6 +57,8 @@ const cover = getCover(post.data.cover);
     <div class="post-body">
       <Content />
     </div>
+
+    <Comments locale={locale} />
 
     <nav class="post-nav">
       <span>
