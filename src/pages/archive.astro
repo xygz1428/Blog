@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPostsByYear, formatDate, type Post } from '../utils/posts';
+import { getPostsByYear, formatDate, type Post, postSlug } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 const groups = await getPostsByYear();
@@ -43,7 +43,7 @@ function groupByMonth(posts: Post[]): { month: number; posts: Post[] }[] {
                 {monthGroup.posts.map((post) => (
                   <li>
                     <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-                    <a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>
+                    <a href={withBase(`/blog/${postSlug(post)}/`)}>{post.data.title}</a>
                   </li>
                 ))}
               </ul>

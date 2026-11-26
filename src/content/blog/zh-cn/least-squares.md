@@ -4,6 +4,7 @@ description: 用最小二乘法验证站点的公式渲染与代码高亮是否�
 pubDate: 2026-11-25
 category: 科研
 tags: ['公式', 'KaTeX', '线性代数']
+cover: cover-least-squares.jpg
 ---
 
 这篇用来验证数学公式能否正常渲染。

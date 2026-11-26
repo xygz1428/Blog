@@ -16,6 +16,8 @@ const blog = defineCollection({
     // 四选一，与 src/site.mjs 的 categories 对应
     category: z.enum(['科研', '技术', '学习', '生活']).default('技术'),
     tags: z.array(z.string()).default([]),
+    // 封面图文件名，图片放 src/content/blog/images/ 下
+    cover: z.string().optional(),
     // true 时不会出现在列表与 RSS 里
     draft: z.boolean().default(false),
   }),

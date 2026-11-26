@@ -1,26 +1,34 @@
 ---
 import { render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllPosts, getNeighbors, formatDate, readingTime } from '../../utils/posts';
+import { getAllPosts, getNeighbors, formatDate, readingTime, postSlug } from '../../utils/posts';
+import { getCover } from '../../utils/covers';
 import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+  return posts.map((post) => ({ params: { slug: postSlug(post) }, props: { post, posts } }));
 }
 
 const { post, posts } = Astro.props;
 const { Content, headings } = await render(post);
-const { prev, next } = getNeighbors(posts, post.id);
+const { prev, next } = getNeighbors(posts, postSlug(post));
 
 // 目录只取 h2 / h3，少于两条就不显示
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const minutes = readingTime(post.body);
+const cover = getCover(post.data.cover);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description || post.data.title} isPost>
   <div class="post-layout">
     <article>
+      {cover && (
+        <div class="post-cover">
+          <Image src={cover} alt={post.data.title} width={880} format="webp" loading="eager" />
+        </div>
+      )}
       <header class="post-header">
         <h1>{post.data.title}</h1>
         <div class="post-meta">

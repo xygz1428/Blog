@@ -4,6 +4,7 @@ description: 记录建站的初衷与技术选型，以及这个博客打算写�
 pubDate: 2026-11-26
 category: 技术
 tags: ['Astro', '建站', '随笔']
+cover: cover-hello-astro.jpg
 ---
 
 搭这个博客，最直接的原因是：笔记散在太多地方了。

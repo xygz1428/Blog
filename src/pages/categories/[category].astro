@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../site.mjs';
-import { getPostsByCategory, formatDate } from '../../utils/posts';
+import { getPostsByCategory, formatDate, postSlug } from '../../utils/posts';
 import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
@@ -25,7 +25,7 @@ const posts = await getPostsByCategory(category);
       <ul class="post-list">
         {posts.map((post) => (
           <li class="post-item">
-            <h2><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+            <h2><a href={withBase(`/blog/${postSlug(post)}/`)}>{post.data.title}</a></h2>
             <div class="post-meta">
               <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
               {post.data.tags.map((tag) => (

@@ -4,11 +4,12 @@ description: 一篇给自己看的操作说明：新建文章、插入图片、�
 pubDate: 2026-11-26
 category: 技术
 tags: ['写作', '图片', 'Markdown']
+cover: cover-writing-guide.jpg
 ---
 
 这篇既是示例，也是说明书。以后忘了怎么放图片，回来看这里。
 
-![Blog 写作流程：新建文章 → 写内容 → 放图片 → 推送部署](./images/demo-flow.png)
+![Blog 写作流程：新建文章 → 写内容 → 放图片 → 推送部署](../images/demo-flow.png)
 
 *图注写在图片的下一行，用一对星号包起来，构建时会自动变成图注*
 
@@ -33,7 +34,7 @@ src/content/blog/my-post.md  →  /blog/my-post/
 **图片统一放在 `src/content/blog/images/` 目录**，然后在文章里用相对路径引用：
 
 ```markdown
-![图片说明](./images/你的图片.png)
+![图片说明](../images/你的图片.png)
 ```
 
 注意三点：

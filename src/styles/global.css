@@ -833,3 +833,91 @@ pre.astro-code:hover .copy-btn,
 .post-body .footnotes a:hover {
   color: var(--accent);
 }
+/* ── 首页 hero（文字 + 配图）───────────────────────────── */
+
+.hero {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hero-media {
+  flex: 0 0 13rem;
+}
+
+.hero-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 720px) {
+  .hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+  .hero-media {
+    flex: none;
+    width: 7rem;
+  }
+}
+
+/* ── 列表项缩略图 ─────────────────────────────────────── */
+
+.post-item {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.post-item-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.post-thumb {
+  flex: 0 0 7.5rem;
+  display: block;
+  line-height: 0;
+}
+
+.post-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  transition: opacity 0.15s;
+}
+
+.post-thumb:hover img {
+  opacity: 0.82;
+}
+
+@media (max-width: 640px) {
+  .post-thumb {
+    flex: 0 0 5rem;
+  }
+}
+
+/* ── 文章封面 ─────────────────────────────────────────── */
+
+.post-cover {
+  margin-bottom: 1.8rem;
+}
+
+.post-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}

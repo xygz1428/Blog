@@ -1,4 +1,4 @@
-import { getAllPosts, formatDate } from '../utils/posts';
+import { getAllPosts, formatDate, postSlug } from '../utils/posts';
 
 /**
  * 构建期生成搜索索引。前端按需拉取，无需任何搜索服务。
@@ -13,7 +13,7 @@ export async function GET() {
     category: post.data.category,
     tags: post.data.tags,
     date: formatDate(post.data.pubDate),
-    url: `${base}blog/${post.id}/`,
+    url: `${base}blog/${postSlug(post)}/`,
     // 正文纯文本，供关键词匹配（截断以控制体积）
     body: (post.body ?? '').replace(/```[\s\S]*?```/g, ' ').replace(/[#>*`_\-]/g, ' ').slice(0, 2000),
   }));
