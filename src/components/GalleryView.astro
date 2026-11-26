@@ -5,6 +5,7 @@ import { t } from '../i18n/utils';
 import type { Locale } from '../i18n/ui';
 import creditsData from '../data/image-credits.json';
 import wallpaperData from '../data/daily-wallpaper.json';
+import wallhavenData from '../data/wallhaven.json';
 
 interface Props {
   locale: Locale;
@@ -54,6 +55,9 @@ const copy = {
     note: '标有「图：」的图片采用 CC BY 系列许可，需署名；其余为 CC0 或公有领域，无需署名。完整来源与许可记录在仓库的「图片来源台账」中，如认为使用不当可联系删除。',
     bingTitle: '必应壁纸',
     bingNote: '以下壁纸由必应每日更新，版权归各摄影师所有。本站仅以热链接展示，不存储、不再分发；点击图片可跳转到必应查看原图与版权信息。',
+    wallhavenTitle: 'Wallhaven 壁纸',
+    wallhavenNote: '以下壁纸来自 Wallhaven 社区，图片版权归上传者与原作者。本站仅热链接缩略图并标注来源，点击可跳转到 Wallhaven 原页面。',
+    wallhavenCredit: '来源：Wallhaven',
   },
   en: {
     landscapes: 'Landscapes',
@@ -63,6 +67,9 @@ const copy = {
     note: 'Images marked “Image:” are licensed under CC BY variants and require attribution; the rest are CC0 or public domain and need none. Full sources and licences are recorded in the repository ledger; contact us for removal if a use is inappropriate.',
     bingTitle: 'Bing wallpapers',
     bingNote: 'These wallpapers are updated daily by Bing and remain copyright of their photographers. This site only hotlinks them — nothing is stored or redistributed. Click through to Bing for the original and its copyright notice.',
+    wallhavenTitle: 'Wallhaven wallpapers',
+    wallhavenNote: 'These come from the Wallhaven community; rights belong to the uploaders and original authors. This site only hotlinks the thumbnails and credits the source — click through to the original page.',
+    wallhavenCredit: 'Source: Wallhaven',
   },
 } as const;
 
@@ -123,6 +130,25 @@ const c = copy[locale];
           <img src={item.url} alt={item.title} loading="lazy" decoding="async" />
         </a>
         <figcaption class="gallery-credit">{item.copyright}</figcaption>
+      </figure>
+    ))
+  }
+</div>
+
+<h2>{c.wallhavenTitle}</h2>
+<p class="gallery-sub">{c.wallhavenNote}</p>
+<div class="gallery-grid">
+  {
+    (wallhavenData.items ?? []).slice(0, 8).map((item) => (
+      <figure class="gallery-item">
+        <a href={item.page} target="_blank" rel="noopener noreferrer">
+          <img src={item.url} alt="" loading="lazy" decoding="async" />
+        </a>
+        <figcaption class="gallery-credit">
+          <a href={item.page} target="_blank" rel="noopener noreferrer">
+            {c.wallhavenCredit} · {item.resolution}
+          </a>
+        </figcaption>
       </figure>
     ))
   }

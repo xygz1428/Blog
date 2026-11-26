@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import { Image } from 'astro:assets';
-import { getNeighbors, formatDate, readingTime, postSlug, type Post } from '../utils/posts';
+import { getNeighbors, getRelatedPosts, formatDate, readingTime, postSlug, type Post } from '../utils/posts';
 import { getCover } from '../utils/covers';
 import { withBase } from '../utils/url';
 import { t, localizedHref, categoryLabel } from '../i18n/utils';
@@ -23,6 +23,7 @@ const { prev, next } = getNeighbors(posts, postSlug(post));
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const minutes = readingTime(post.body);
 const cover = getCover(post.data.cover);
+const related = getRelatedPosts(post, posts, 3);
 ---
 
 <div class="post-layout">
@@ -58,6 +59,22 @@ const cover = getCover(post.data.cover);
     <div class="post-body">
       <Content />
     </div>
+
+    {
+      related.length > 0 && (
+        <section class="related">
+          <h2>{dict.relatedTitle}</h2>
+          <ul class="related-list">
+            {related.map((item) => (
+              <li>
+                <a href={withBase(localizedHref(locale, `/blog/${postSlug(item)}/`))}>{item.data.title}</a>
+                <span class="related-meta">{formatDate(item.data.pubDate)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     <Comments locale={locale} />
 

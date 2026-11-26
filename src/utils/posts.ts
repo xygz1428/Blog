@@ -101,3 +101,23 @@ export function readingTime(body: string | undefined): number {
   const minutes = cjk / 350 + latin / 220;
   return Math.max(1, Math.round(minutes));
 }
+
+/**
+ * 相关文章：按标签重合度打分，同分类加一分。
+ * 分数为 0 的不返回，避免"为了凑数"推荐无关内容。
+ */
+export function getRelatedPosts(post: Post, all: Post[], limit = 3): Post[] {
+  const tags = new Set(post.data.tags);
+  const scored = all
+    .filter((p) => postSlug(p) !== postSlug(post))
+    .map((p) => {
+      let score = 0;
+      for (const tag of p.data.tags) if (tags.has(tag)) score += 2;
+      if (p.data.category === post.data.category) score += 1;
+      return { post: p, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score || b.post.data.pubDate.getTime() - a.post.data.pubDate.getTime());
+
+  return scored.slice(0, limit).map((entry) => entry.post);
+}
