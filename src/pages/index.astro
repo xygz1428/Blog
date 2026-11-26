@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.mjs';
+import { getAllPosts, getCategoryCounts, formatDate } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+const posts = await getAllPosts();
+const latest = posts.slice(0, SITE.pageSize);
+const counts = await getCategoryCounts();
+---
+
+<BaseLayout>
+  <section class="hero">
+    <h1>{SITE.title}</h1>
+    <p>{SITE.tagline}。这里记录科研过程、编程实践、学习笔记，以及一些生活随笔。</p>
+  </section>
+
+  <h2>最新文章</h2>
+  {
+    latest.length === 0 ? (
+      <p class="empty">还没有文章。在 <code>src/content/blog/</code> 下新建 Markdown 文件即可。</p>
+    ) : (
+      <ul class="post-list">
+        {latest.map((post) => (
+          <li class="post-item">
+            <h2>
+              <a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>
+            </h2>
+            <div class="post-meta">
+              <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              <span>·</span>
+              <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+              {post.data.tags.length > 0 && <span>·</span>}
+              {post.data.tags.map((tag) => (
+                <a class="tag" href={withBase(`/tags/${tag}/`)}>{tag}</a>
+              ))}
+            </div>
+            {post.data.description && <p class="post-desc">{post.data.description}</p>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <p style="margin-top:1.5rem">
+    <a href={withBase('/blog/')}>查看全部文章 →</a>
+  </p>
+
+  <h2>分类</h2>
+  <ul class="cat-grid">
+    {
+      SITE.categories.map((category) => (
+        <li>
+          <a class="cat-card" href={withBase(`/categories/${category}/`)}>
+            <strong>{category}</strong>
+            <span>{counts[category] ?? 0} 篇</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

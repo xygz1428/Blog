@@ -1,0 +1,42 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllPosts, getNeighbors, formatDate } from '../../utils/posts';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { prev, next } = getNeighbors(posts, post.id);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description || post.data.title} isPost>
+  <article>
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <div class="post-meta">
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        {post.data.updatedDate && <span>（更新于 {formatDate(post.data.updatedDate)}）</span>}
+        <span>·</span>
+        <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+        {post.data.tags.length > 0 && <span>·</span>}
+        {post.data.tags.map((tag) => (
+          <a class="tag" href={withBase(`/tags/${tag}/`)}>{tag}</a>
+        ))}
+      </div>
+    </header>
+
+    <div class="post-body wrap-narrow">
+      <Content />
+    </div>
+
+    <nav class="post-meta" style="margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);justify-content:space-between">
+      <span>{prev ? <a href={withBase(`/blog/${prev.id}/`)}>← {prev.data.title}</a> : <span />}</span>
+      <span>{next ? <a href={withBase(`/blog/${next.id}/`)}>{next.data.title} →</a> : <span />}</span>
+    </nav>
+  </article>
+</BaseLayout>

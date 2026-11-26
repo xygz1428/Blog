@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPostsByYear, formatDate } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+const groups = await getPostsByYear();
+const total = groups.reduce((sum, group) => sum + group.posts.length, 0);
+---
+
+<BaseLayout title="归档">
+  <div class="page-head">
+    <h1>归档</h1>
+    <p>共 {total} 篇，按年份排列</p>
+  </div>
+
+  {
+    groups.length === 0 ? (
+      <p class="empty">还没有文章。</p>
+    ) : (
+      groups.map((group) => (
+        <section>
+          <h2 class="archive-year">{group.year}</h2>
+          <ul class="archive-list">
+            {group.posts.map((post) => (
+              <li>
+                <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                <a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    )
+  }
+</BaseLayout>

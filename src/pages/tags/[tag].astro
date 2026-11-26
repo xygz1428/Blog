@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllPosts, formatDate } from '../../utils/posts';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const tags = new Set<string>();
+  for (const post of posts) for (const tag of post.data.tags) tags.add(tag);
+  return [...tags].map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const all = await getAllPosts();
+const posts = all.filter((post) => post.data.tags.includes(tag));
+---
+
+<BaseLayout title={`标签：${tag}`}>
+  <div class="page-head">
+    <h1>标签：{tag}</h1>
+    <p>共 {posts.length} 篇 · <a href={withBase('/blog/')}>返回全部文章</a></p>
+  </div>
+
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li class="post-item">
+          <h2><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+          <div class="post-meta">
+            <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+            <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

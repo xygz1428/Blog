@@ -1,0 +1,114 @@
+---
+import { SITE } from '../site.mjs';
+import { withBase, stripBase } from '../utils/url';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** 文章页传 true，标题就只显示文章名 */
+  isPost?: boolean;
+}
+
+const { title, description = SITE.description, isPost = false } = Astro.props;
+
+const pageTitle = title ? (isPost ? `${title} · ${SITE.title}` : `${title} · ${SITE.title}`) : `${SITE.title} · ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com');
+const currentPath = stripBase(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang={SITE.lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href={withBase('/rss.xml')} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content={isPost ? 'article' : 'website'} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- 主题：在首次绘制前定好，避免闪白 -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('Blog-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = saved || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={withBase('/')}>{SITE.title}</a>
+        <nav class="nav">
+          {
+            SITE.nav.map((item) => (
+              <a
+                href={withBase(item.href)}
+                aria-current={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href)) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色/浅色模式">
+            <span id="theme-icon">◐</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {SITE.title} · {SITE.author}</span>
+        <span>
+          <a href={withBase('/rss.xml')}>RSS</a>
+          <span> · </span>
+          <a href="https://astro.build" rel="noopener" target="_blank">Astro</a>
+        </span>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        var icon = document.getElementById('theme-icon');
+        function paint(theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          if (icon) icon.textContent = theme === 'dark' ? '☀' : '◐';
+        }
+        paint(document.documentElement.getAttribute('data-theme') || 'light');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            paint(next);
+            try { localStorage.setItem('Blog-theme', next); } catch (e) {}
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

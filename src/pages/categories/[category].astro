@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../site.mjs';
+import { getPostsByCategory, formatDate } from '../../utils/posts';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  return SITE.categories.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const posts = await getPostsByCategory(category);
+---
+
+<BaseLayout title={`分类：${category}`}>
+  <div class="page-head">
+    <h1>{category}</h1>
+    <p>共 {posts.length} 篇 · <a href={withBase('/blog/')}>返回全部文章</a></p>
+  </div>
+
+  {
+    posts.length === 0 ? (
+      <p class="empty">这个分类下还没有文章。</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <h2><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+            <div class="post-meta">
+              <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              {post.data.tags.map((tag) => (
+                <a class="tag" href={withBase(`/tags/${tag}/`)}>{tag}</a>
+              ))}
+            </div>
+            {post.data.description && <p class="post-desc">{post.data.description}</p>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

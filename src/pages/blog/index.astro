@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllPosts, formatDate } from '../../utils/posts';
+import { withBase } from '../../utils/url';
+
+const posts = await getAllPosts();
+---
+
+<BaseLayout title="文章">
+  <div class="page-head">
+    <h1>文章</h1>
+    <p>共 {posts.length} 篇</p>
+  </div>
+
+  {
+    posts.length === 0 ? (
+      <p class="empty">还没有文章。</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <h2>
+              <a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>
+            </h2>
+            <div class="post-meta">
+              <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              <span>·</span>
+              <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+              {post.data.tags.map((tag) => (
+                <a class="tag" href={withBase(`/tags/${tag}/`)}>{tag}</a>
+              ))}
+            </div>
+            {post.data.description && <p class="post-desc">{post.data.description}</p>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
