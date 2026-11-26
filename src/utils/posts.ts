@@ -66,3 +66,17 @@ export function formatDate(date: Date): string {
   const d = String(date.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }
+
+/**
+ * 估算阅读时长（分钟）。
+ * 中文按 350 字/分钟，英文按 220 词/分钟，代码块折半计算。
+ */
+export function readingTime(body: string | undefined): number {
+  if (!body) return 1;
+  const text = body.replace(/```[\s\S]*?```/g, ' ');
+  const cjk = (text.match(/[\u4e00-\u9fa5]/g) ?? []).length;
+  const latin = (text.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[A-Za-z0-9_]+/g) ?? []).length;
+  const minutes = cjk / 350 + latin / 220;
+  return Math.max(1, Math.round(minutes));
+}
+
