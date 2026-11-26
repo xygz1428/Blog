@@ -29,6 +29,7 @@ const dict = t(locale);
 const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${dict.siteTagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com');
 const currentPath = stripBase(Astro.url.pathname);
+const ogImage = new URL(withBase('/og.png'), SITE.url).toString();
 
 // 导航项：语言无关的路径 + 当前语言的文案
 const navItems = [
@@ -75,7 +76,12 @@ const isActive = (href: string) => {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.title} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={SITE.title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
 
