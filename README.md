@@ -7,7 +7,7 @@
 - **Markdown 写作**：一篇文章 = 一个文件，Git 管版本
 - **免费托管**：GitHub Pages + GitHub Actions 自动部署
 
-线上地址（部署后）：`https://xyzg1428.github.io/Blog/`
+线上地址（部署后）：`https://xygz1428.github.io/Blog/`
 
 ---
 
@@ -94,7 +94,7 @@ draft: false               # 选填，true 时不会出现在任何列表里
 `src/site.mjs` 里：
 
 ```js
-url: 'https://xyzg1428.github.io',
+url: 'https://xygz1428.github.io',
 base: '/Blog',          // ← 必须等于仓库名
 ```
 
@@ -109,7 +109,7 @@ git init
 git add .
 git commit -m "init: Blog V0.1.0"
 git branch -M main
-git remote add origin https://github.com/xyzg1428/Blog.git
+git remote add origin https://github.com/xygz1428/Blog.git
 git push -u origin main
 ```
 
@@ -125,7 +125,7 @@ git push -u origin main
 在仓库 **Actions** 页能看到进度；成功后访问：
 
 ```
-https://xyzg1428.github.io/Blog/
+https://xygz1428.github.io/Blog/
 ```
 
 ### 之后怎么更新

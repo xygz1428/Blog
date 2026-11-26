@@ -14,10 +14,10 @@ export const SITE = {
   lang: 'zh-CN',
 
   // 部署前替换成你自己的地址。当前按「项目仓库 Blog」配置：
-  //   仓库地址 https://github.com/xyzg1428/Blog
-  //   站点地址 https://xyzg1428.github.io/Blog
-  // 若改用「用户主页仓库」（仓库名必须是 xyzg1428.github.io），则 base 改为 '/'
-  url: 'https://xyzg1428.github.io',
+  //   仓库地址 https://github.com/xygz1428/Blog
+  //   站点地址 https://xygz1428.github.io/Blog
+  // 若改用「用户主页仓库」（仓库名必须是 xygz1428.github.io），则 base 改为 '/'
+  url: 'https://xygz1428.github.io',
   base: '/Blog',
 
   // 分类固定为这四类，与文章 frontmatter 的 category 对应
