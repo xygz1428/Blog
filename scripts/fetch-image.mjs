@@ -36,7 +36,7 @@ const gifOnly = args.includes('--gif');
 const imageDir = join(root, getFlag('outdir', 'src/content/blog/images'));
 
 const gifParam = gifOnly ? '&extension=gif' : '';
-const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial${gifParam}`;
+const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial&mature=false${gifParam}`;
 
 const rank = (lic) => ({ cc0: 0, pdm: 0, by: 1, 'by-sa': 2 }[lic] ?? 3);
 
@@ -49,7 +49,7 @@ const data = await res.json();
 
 const allowed = new Set(cc0Only ? ['cc0'] : ['cc0', 'by', 'by-sa', 'pdm']);
 const candidates = (data.results ?? [])
-  .filter((item) => allowed.has(item.license))
+  .filter((item) => allowed.has(item.license) && item.mature !== true)
   // 优先 CC0（无需署名），其次 CC BY
   .sort((a, b) => (a.license === 'cc0' ? 0 : 1) - (b.license === 'cc0' ? 0 : 1));
 if (candidates.length === 0) {

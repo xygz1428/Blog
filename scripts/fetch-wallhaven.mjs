@@ -14,8 +14,9 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const out = join(root, 'src', 'data', 'wallhaven.json');
 
-// categories=111 全部类别；purity=100 仅 SFW；sorting=toplist 按热度
-const API = 'https://wallhaven.cc/api/v1/search?categories=111&purity=100&sorting=toplist&order=desc&page=1';
+// categories=100 只取 general（风景/抽象），排除 anime(010) 与 people(001)，避免擦边内容
+// purity=100 仅 SFW；sorting=toplist 按热度
+const API = 'https://wallhaven.cc/api/v1/search?categories=100&purity=100&sorting=toplist&order=desc&page=1';
 
 const res = await fetch(API, { headers: { 'User-Agent': 'Mozilla/5.0 (kblog)' } });
 if (!res.ok) {

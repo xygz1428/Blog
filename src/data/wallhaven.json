@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T17:40:26.456Z",
+  "updatedAt": "2026-11-26T17:48:40.676Z",
   "items": [
     {
       "id": "7jmgey",
@@ -16,25 +16,11 @@
       "category": "general"
     },
     {
-      "id": "d82pjm",
-      "url": "https://th.wallhaven.cc/small/d8/d82pjm.jpg",
-      "page": "https://wallhaven.cc/w/d82pjm",
-      "resolution": "2972x3559",
-      "category": "anime"
-    },
-    {
       "id": "8gpx71",
       "url": "https://th.wallhaven.cc/small/8g/8gpx71.jpg",
       "page": "https://wallhaven.cc/w/8gpx71",
       "resolution": "4378x2919",
       "category": "general"
-    },
-    {
-      "id": "9oe531",
-      "url": "https://th.wallhaven.cc/small/9o/9oe531.jpg",
-      "page": "https://wallhaven.cc/w/9oe531",
-      "resolution": "2025x3070",
-      "category": "anime"
     },
     {
       "id": "yqwmod",
@@ -55,6 +41,20 @@
       "url": "https://th.wallhaven.cc/small/xe/xew6xd.jpg",
       "page": "https://wallhaven.cc/w/xew6xd",
       "resolution": "1920x1080",
+      "category": "general"
+    },
+    {
+      "id": "k8rw5d",
+      "url": "https://th.wallhaven.cc/small/k8/k8rw5d.jpg",
+      "page": "https://wallhaven.cc/w/k8rw5d",
+      "resolution": "6144x3457",
+      "category": "general"
+    },
+    {
+      "id": "xewl8o",
+      "url": "https://th.wallhaven.cc/small/xe/xewl8o.jpg",
+      "page": "https://wallhaven.cc/w/xewl8o",
+      "resolution": "5640x2400",
       "category": "general"
     }
   ]
