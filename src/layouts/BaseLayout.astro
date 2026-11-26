@@ -40,6 +40,7 @@ const navItems = [
   { href: '/archive', label: dict.navArchive },
   { href: '/tags', label: dict.navTags },
   { href: '/search', label: dict.navSearch },
+  { href: '/gallery', label: dict.navGallery },
   { href: '/about', label: dict.navAbout },
 ];
 
@@ -271,7 +272,7 @@ const isActive = (href: string) => {
         lightboxImg.removeAttribute('src');
       };
 
-      for (const img of Array.from(document.querySelectorAll<HTMLImageElement>('.post-body img'))) {
+      for (const img of Array.from(document.querySelectorAll<HTMLImageElement>('.post-body img, .gallery-item img'))) {
         img.addEventListener('click', () => {
           lightboxImg.src = img.currentSrc || img.src;
           lightboxImg.alt = img.alt;

@@ -17,6 +17,8 @@ const isDefault = locale === DEFAULT_LOCALE;
 
 const posts = await getAllPosts(locale);
 const latest = posts.slice(0, SITE.pageSize);
+// 首篇做大卡片，其余紧凑列表（视觉主次）
+const [featured, ...rest] = latest;
 const counts = await getCategoryCounts(locale);
 const heroCover = getCover('hero-quiet.jpg');
 
@@ -45,8 +47,31 @@ const visibleCategories = isDefault
   latest.length === 0 ? (
     <p class="empty">{dict.noPosts}</p>
   ) : (
+    <>
+      {featured && (() => {
+        const cover = getCover(featured.data.cover);
+        const href = withBase(localizedHref(locale, `/blog/${postSlug(featured)}/`));
+        return (
+          <a class="post-featured" href={href}>
+            {cover && (
+              <div class="post-featured-media">
+                <Image src={cover} alt="" width={720} height={420} format="webp" loading="eager" />
+              </div>
+            )}
+            <div class="post-featured-body">
+              <h3>{featured.data.title}</h3>
+              <div class="post-meta">
+                <time datetime={featured.data.pubDate.toISOString()}>{formatDate(featured.data.pubDate)}</time>
+                <span>·</span>
+                <span>{categoryLabel(locale, featured.data.category)}</span>
+              </div>
+              {featured.data.description && <p class="post-desc">{featured.data.description}</p>}
+            </div>
+          </a>
+        );
+      })()}
     <ul class="post-list">
-      {latest.map((post) => {
+      {rest.map((post) => {
         const cover = getCover(post.data.cover);
         const href = withBase(localizedHref(locale, `/blog/${postSlug(post)}/`));
         return (
@@ -79,6 +104,7 @@ const visibleCategories = isDefault
         );
       })}
     </ul>
+    </>
   )
 }
 
