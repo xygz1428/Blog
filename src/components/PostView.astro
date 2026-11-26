@@ -27,13 +27,6 @@ const cover = getCover(post.data.cover);
 
 <div class="post-layout">
   <article>
-    {
-      cover && (
-        <div class="post-cover">
-          <Image src={cover} alt={post.data.title} width={880} format="webp" loading="eager" />
-        </div>
-      )
-    }
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
@@ -53,6 +46,14 @@ const cover = getCover(post.data.cover);
         ))}
       </div>
     </header>
+
+    {
+      cover && (
+        <div class="post-cover">
+          <Image src={cover} alt={post.data.title} width={880} format="webp" loading="eager" />
+        </div>
+      )
+    }
 
     <div class="post-body">
       <Content />
