@@ -4,7 +4,7 @@ description: Four questions, twenty minutes. The value of review is not in recor
 pubDate: 2026-11-10
 category: 学习
 tags: ['复盘', '方法', '习惯']
-cover: cover-three-pass.jpg
+cover: anime-06.jpg
 ---
 Most weekly reviews will turn into a "running account + self-blame", and then give up after persisting for three weeks.
 

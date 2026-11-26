@@ -4,7 +4,7 @@ description: 不是「哪个更好」，而是「换掉它的成本有多高」�
 pubDate: 2026-11-08
 category: 生活
 tags: ['工具', '决策', '方法']
-cover: cover-writing-guide.jpg
+cover: anime-04.jpg
 ---
 
 选工具时的纠结，多半来自一个错误的问题：**哪个更好？**

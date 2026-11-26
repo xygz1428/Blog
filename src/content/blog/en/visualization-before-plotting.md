@@ -4,7 +4,7 @@ description: The same data, different questions, and completely different graphs
 pubDate: 2026-11-14
 category: 科研
 tags: ['可视化', '数据', '方法']
-cover: cover-least-squares.jpg
+cover: anime-05.jpg
 ---
 Before drawing a picture, think about one thing clearly: **What question does this picture want to answer? **
 

@@ -4,7 +4,7 @@ description: Starting from "what is the content, who writes it, how often does i
 pubDate: 2026-11-19
 category: 技术
 tags: ['Architecture', 'Static Site', 'Deployment']
-cover: cover-schema.jpg
+cover: anime-07.jpg
 ---
 
 Whenever someone asks which database my blog uses, I say: none. The usual reply is "then where do the posts live".

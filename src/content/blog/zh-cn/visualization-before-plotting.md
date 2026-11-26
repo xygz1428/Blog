@@ -4,7 +4,7 @@ description: 同一份数据，问题不同，图就完全不同。四种常见�
 pubDate: 2026-11-14
 category: 科研
 tags: ['可视化', '数据', '方法']
-cover: cover-least-squares.jpg
+cover: anime-05.jpg
 ---
 
 画图之前先想清楚一件事：**这张图要回答什么问题？**

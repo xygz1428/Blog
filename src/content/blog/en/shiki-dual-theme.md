@@ -4,7 +4,7 @@ description: How syntaxHighlight and shikiConfig divide responsibilities in Astr
 pubDate: 2026-11-24
 category: 技术
 tags: ['Astro', 'Shiki', 'Highlighting']
-cover: cover-schema.jpg
+cover: anime-02.webp
 ---
 
 My code blocks were dark even in light mode. After a round of debugging, the cause was **a config key written where nothing reads it**.

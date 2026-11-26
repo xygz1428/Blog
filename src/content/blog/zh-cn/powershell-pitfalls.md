@@ -1,4 +1,5 @@
 ---
+cover: demo-flow.png
 title: PowerShell 里容易踩的五个坑
 description: 只读变量、编码、错误继续执行、中文匹配——都是让脚本"看起来跑成功了"的坑。
 pubDate: 2026-11-20

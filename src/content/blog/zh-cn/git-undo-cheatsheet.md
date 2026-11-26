@@ -1,4 +1,5 @@
 ---
+cover: cover-hello-astro.jpg
 title: Git 撤销场景速查：reset / revert / restore 到底用哪个
 description: 按「改了什么、提交了没有、推没推」三个维度，把撤销命令对应清楚。
 pubDate: 2026-11-22

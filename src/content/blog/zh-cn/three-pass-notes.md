@@ -4,7 +4,7 @@ description: 一套用来对付「看懂了但记不住」的笔记流程，包�
 pubDate: 2026-11-24
 category: 学习
 tags: ['笔记', '方法', '学习']
-cover: cover-three-pass.jpg
+cover: anime-03.jpg
 ---
 
 看论文或教材时，最常见的错觉是「我懂了」。

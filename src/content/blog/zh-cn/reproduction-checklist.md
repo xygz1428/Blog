@@ -4,7 +4,7 @@ description: 从环境、数据、参数到评估口径，一份按顺序排查�
 pubDate: 2026-11-13
 category: 科研
 tags: ['复现', '实验', '检查清单']
-cover: cover-least-squares.jpg
+cover: anime-01.webp
 ---
 
 复现别人的实验，最常见的结局是「跑通了，但数字对不上」。

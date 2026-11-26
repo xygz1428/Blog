@@ -4,7 +4,7 @@ description: 写作不是记录思考的结果，而是思考本身的过程。
 pubDate: 2026-11-06
 category: 生活
 tags: ['写作', '思考', '随笔']
-cover: cover-writing-guide.jpg
+cover: art-01.jpg
 ---
 
 搭这个博客时，有人问我：现在谁还看博客？

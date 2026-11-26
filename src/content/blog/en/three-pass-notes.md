@@ -4,7 +4,7 @@ description: A set of note-taking procedures to deal with "understanding but not
 pubDate: 2026-11-24
 category: 学习
 tags: ['笔记', '方法', '学习']
-cover: cover-three-pass.jpg
+cover: anime-03.jpg
 ---
 When reading papers or textbooks, the most common illusion is "I understand."
 When I close the book, I find that I can't speak. This is because I don't have enough depth of understanding, not because of my memory.

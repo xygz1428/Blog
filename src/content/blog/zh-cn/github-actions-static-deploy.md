@@ -4,7 +4,7 @@ description: 一个能跑起来的最小 workflow，以及我踩过的 npm ci �
 pubDate: 2026-11-21
 category: 技术
 tags: ['GitHub Actions', 'CI', '部署']
-cover: cover-schema.jpg
+cover: cover-writing-guide.jpg
 ---
 
 静态站部署到 GitHub Pages，官方推荐的路径是 Actions 构建 + 上传产物 + 部署。下面是能跑的最小配置。

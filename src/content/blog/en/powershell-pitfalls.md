@@ -1,4 +1,5 @@
 ---
+cover: demo-flow.png
 title: Five common pitfalls in PowerShell
 description: Read-only variables, encoding, error continuation, Chinese matching - all are pitfalls that make the script "look like it ran successfully".
 pubDate: 2026-11-20

@@ -4,7 +4,7 @@ description: "An operation instruction for yourself: create a new article, inser
 pubDate: 2026-11-26
 category: 技术
 tags: ['写作', '图片', 'Markdown']
-cover: cover-writing-guide.jpg
+cover: art-03.jpg
 ---
 This article is both an example and an instruction manual. I’ll forget how to put pictures in the future, so I’ll come back and look here.
 

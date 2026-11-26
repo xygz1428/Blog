@@ -4,7 +4,7 @@ description: Astro 7 里 syntaxHighlight 与 shikiConfig 的分工，以及一�
 pubDate: 2026-11-24
 category: 技术
 tags: ['Astro', 'Shiki', '高亮']
-cover: cover-schema.jpg
+cover: anime-02.webp
 ---
 
 代码块在浅色模式下也是深色块——这个现象我排查了一轮，结论是**配置写在了不认识它的地方**。

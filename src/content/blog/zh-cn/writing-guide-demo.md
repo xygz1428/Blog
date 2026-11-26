@@ -4,7 +4,7 @@ description: 一篇给自己看的操作说明：新建文章、插入图片、�
 pubDate: 2026-11-26
 category: 技术
 tags: ['写作', '图片', 'Markdown']
-cover: cover-writing-guide.jpg
+cover: art-03.jpg
 ---
 
 这篇既是示例，也是说明书。以后忘了怎么放图片，回来看这里。

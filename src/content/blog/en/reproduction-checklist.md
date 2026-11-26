@@ -4,7 +4,7 @@ description: From environment, data, parameters to evaluation caliber, a recurre
 pubDate: 2026-11-13
 category: 科研
 tags: ['复现', '实验', '检查清单']
-cover: cover-least-squares.jpg
+cover: anime-01.webp
 ---
 When reproducing other people's experiments, the most common outcome is "it ran through, but the numbers don't match up."
 

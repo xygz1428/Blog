@@ -4,7 +4,7 @@ description: 从「内容是什么、谁来写、多久改一次」三个问题�
 pubDate: 2026-11-19
 category: 技术
 tags: ['架构', '静态站', '部署']
-cover: cover-schema.jpg
+cover: anime-07.jpg
 ---
 
 每次有人问「你的博客用什么数据库」，我都回答：没有数据库。对方的反应通常是「那文章存在哪」。

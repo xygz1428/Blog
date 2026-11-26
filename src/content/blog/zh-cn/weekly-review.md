@@ -4,7 +4,7 @@ description: 四个问题、二十分钟。复盘的价值不在记录，在于�
 pubDate: 2026-11-10
 category: 学习
 tags: ['复盘', '方法', '习惯']
-cover: cover-three-pass.jpg
+cover: anime-06.jpg
 ---
 
 大多数周复盘会变成「流水账 + 自责」，然后坚持三周就放弃。

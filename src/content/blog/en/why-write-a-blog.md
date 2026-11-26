@@ -4,7 +4,7 @@ description: Writing is not about recording the results of thinking, but the pro
 pubDate: 2026-11-06
 category: 生活
 tags: ['写作', '思考', '随笔']
-cover: cover-writing-guide.jpg
+cover: art-01.jpg
 ---
 When I started this blog, someone asked me: Who still reads blogs now?
 

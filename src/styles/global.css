@@ -1401,11 +1401,36 @@ pre.astro-code:hover .copy-btn,
 /* ── 访问量 ───────────────────────────────────────────── */
 
 .visit-stat {
-  font-family: var(--mono);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--sans);
   font-size: 0.78rem;
   color: var(--fg-faint);
 }
 
-.visit-stat span {
-  color: var(--fg-muted);
+.visit-stat .stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.visit-stat .stat-num {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.visit-stat .stat-label {
+  color: var(--fg-faint);
+}
+
+.visit-stat .stat-sep {
+  color: var(--border-strong);
+}
+
+.footer-copy {
+  font-family: var(--sans);
 }

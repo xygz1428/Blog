@@ -4,7 +4,7 @@ description: A set of reading methods that turns "forget after reading" into "ca
 pubDate: 2026-11-17
 category: 科研
 tags: ['论文', '方法', '阅读']
-cover: cover-least-squares.jpg
+cover: hero-quiet.jpg
 ---
 The most common illusion when reading a paper is "I understand it." When I closed the book, I realized that I couldn't tell the key points - the problem was not my memory, but the depth of my reading.
 

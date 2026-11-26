@@ -10,7 +10,7 @@ export const SITE = {
   // 副标题会显示在首页与页脚
   tagline: '记录科研、技术、学习与生活',
   description: 'Blog —— 一个用来记录科研、编程技术、学习笔记与生活随笔的个人博客。',
-  author: 'Blog',
+  author: '',
   lang: 'zh-CN',
 
   // 部署前替换成你自己的地址。当前按「项目仓库 Blog」配置：

@@ -155,9 +155,22 @@ const isActive = (href: string) => {
 
     <footer class="site-footer">
       <div class="wrap">
-        <span>© {new Date().getFullYear()} {SITE.title} · {SITE.author}</span>
-        <span class="visit-stat">
-          <span id="busuanzi_value_site_pv">–</span> 次访问
+        <span class="footer-copy">© {new Date().getFullYear()} {SITE.title}</span>
+        <span class="visit-stat" aria-label="访问统计">
+          <span class="stat">
+            <span class="stat-num" id="busuanzi_value_site_pv">–</span>
+            <span class="stat-label">{dict.statVisits}</span>
+          </span>
+          <span class="stat-sep" aria-hidden="true">·</span>
+          <span class="stat">
+            <span class="stat-num" id="busuanzi_value_site_uv">–</span>
+            <span class="stat-label">{dict.statVisitors}</span>
+          </span>
+          <span class="stat-sep" aria-hidden="true">·</span>
+          <span class="stat">
+            <span class="stat-num" id="busuanzi_value_page_pv">–</span>
+            <span class="stat-label">{dict.statPage}</span>
+          </span>
         </span>
         <span>
           <a href={withBase(localizedHref(locale, '/disclaimer/'))}>{dict.navDisclaimer}</a>
@@ -296,5 +309,24 @@ const isActive = (href: string) => {
     </script>
     <!-- 访问量统计：不蒜子（第三方脚本，不采集个人身份信息） -->
     <script is:inline async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script is:inline>
+      // 不蒜子返回纯数字，补一个千分位格式
+      (function () {
+        var ids = ['busuanzi_value_site_pv', 'busuanzi_value_site_uv', 'busuanzi_value_page_pv'];
+        var tries = 0;
+        var timer = setInterval(function () {
+          tries++;
+          var done = 0;
+          for (var i = 0; i < ids.length; i++) {
+            var el = document.getElementById(ids[i]);
+            if (el && /^\d+$/.test(el.textContent || '')) {
+              el.textContent = Number(el.textContent).toLocaleString('en-US');
+              done++;
+            }
+          }
+          if (done === ids.length || tries > 20) clearInterval(timer);
+        }, 500);
+      })();
+    </script>
   </body>
 </html>

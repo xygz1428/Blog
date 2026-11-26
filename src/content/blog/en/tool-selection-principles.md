@@ -4,7 +4,7 @@ description: It's not "which one is better", it's "how much does it cost to repl
 pubDate: 2026-11-08
 category: 生活
 tags: ['工具', '决策', '方法']
-cover: cover-writing-guide.jpg
+cover: anime-04.jpg
 ---
 The confusion when choosing tools mostly comes from a wrong question: Which one is better? **
 

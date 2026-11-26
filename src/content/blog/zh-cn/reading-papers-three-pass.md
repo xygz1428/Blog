@@ -4,7 +4,7 @@ description: 一套把「读完就忘」变成「能讲出来」的读法，每�
 pubDate: 2026-11-17
 category: 科研
 tags: ['论文', '方法', '阅读']
-cover: cover-least-squares.jpg
+cover: hero-quiet.jpg
 ---
 
 读论文最常见的错觉是「我读懂了」。合上书就发现讲不出关键点——问题不在记性，在阅读的深度。

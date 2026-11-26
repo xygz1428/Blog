@@ -4,7 +4,7 @@ description: The smallest workflow that can run, and the npm ci cross-platform p
 pubDate: 2026-11-21
 category: 技术
 tags: ['GitHub Actions', 'CI', '部署']
-cover: cover-schema.jpg
+cover: cover-writing-guide.jpg
 ---
 To deploy a static site to GitHub Pages, the officially recommended path is Actions Build + Upload Product + Deployment. Below is the minimum configuration that can run.
 

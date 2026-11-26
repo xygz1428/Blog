@@ -69,6 +69,9 @@ export const ui = {
     notFoundBack: '回首页',
     noTranslation: '这篇文章暂无其他语言版本',
     footerRights: '保留所有权利',
+    statVisits: '次访问',
+    statVisitors: '位访客',
+    statPage: '本页阅读',
   },
   en: {
     siteTagline: 'Notes on research, engineering, learning, and life',
@@ -110,6 +113,9 @@ export const ui = {
     notFoundBack: 'Back to home',
     noTranslation: 'This post is not available in another language yet',
     footerRights: 'All rights reserved',
+    statVisits: 'visits',
+    statVisitors: 'visitors',
+    statPage: 'on this page',
   },
 } as const;
 
