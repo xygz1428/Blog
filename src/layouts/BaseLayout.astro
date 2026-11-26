@@ -69,7 +69,7 @@ const isActive = (href: string) => {
     <!-- 安全策略：GitHub Pages 不支持自定义响应头，只能用 meta 形式 -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://busuanzi.ibruce.info; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <!-- 允许搜索引擎收录；声明不用于 AI 训练（依赖爬虫自觉遵守） -->
@@ -156,6 +156,9 @@ const isActive = (href: string) => {
     <footer class="site-footer">
       <div class="wrap">
         <span>© {new Date().getFullYear()} {SITE.title} · {SITE.author}</span>
+        <span class="visit-stat">
+          <span id="busuanzi_value_site_pv">–</span> 次访问
+        </span>
         <span>
           <a href={withBase(localizedHref(locale, '/disclaimer/'))}>{dict.navDisclaimer}</a>
           <span> · </span>
@@ -291,5 +294,7 @@ const isActive = (href: string) => {
         if (event.key === 'Escape') closeLightbox();
       });
     </script>
+    <!-- 访问量统计：不蒜子（第三方脚本，不采集个人身份信息） -->
+    <script is:inline async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   </body>
 </html>

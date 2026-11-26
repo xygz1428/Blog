@@ -1398,3 +1398,14 @@ pre.astro-code:hover .copy-btn,
     padding-top: clamp(1.5rem, 5vw, 4rem);
   }
 }
+/* ── 访问量 ───────────────────────────────────────────── */
+
+.visit-stat {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--fg-faint);
+}
+
+.visit-stat span {
+  color: var(--fg-muted);
+}
