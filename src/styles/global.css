@@ -1611,3 +1611,61 @@ pre.astro-code:hover .copy-btn,
   color: var(--fg-faint);
   flex: 0 0 auto;
 }
+/* ── 代码块语言标签（参考 distill / antfu）────────────── */
+
+pre.astro-code::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.32rem;
+  left: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+pre.astro-code {
+  padding-top: 1.35rem;
+}
+
+/* 代码块里的复制按钮稍微下移，避免和语言标签挤在一条线上 */
+pre.astro-code .copy-btn {
+  top: 0.3rem;
+}
+
+/* ── 面包屑 ───────────────────────────────────────────── */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  color: var(--fg-faint);
+  margin-bottom: 1rem;
+}
+
+.breadcrumb a {
+  color: var(--fg-faint);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.breadcrumb .sep {
+  color: var(--border-strong);
+}
+
+.breadcrumb .current {
+  color: var(--fg-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 24rem;
+}

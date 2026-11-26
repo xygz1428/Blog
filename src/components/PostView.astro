@@ -5,6 +5,7 @@ import { getNeighbors, getRelatedPosts, formatDate, readingTime, postSlug, type 
 import { getCover } from '../utils/covers';
 import { withBase } from '../utils/url';
 import { t, localizedHref, categoryLabel } from '../i18n/utils';
+import { SITE } from '../site.mjs';
 import Comments from './Comments.astro';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
 
@@ -24,10 +25,33 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const minutes = readingTime(post.body);
 const cover = getCover(post.data.cover);
 const related = getRelatedPosts(post, posts, 3);
+
+// 结构化数据（SEO）：让搜索结果能显示作者、日期等信息
+const postUrl = new URL(withBase(localizedHref(locale, `/blog/${postSlug(post)}/`)), SITE.url).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description || post.data.title,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  inLanguage: locale === 'en' ? 'en' : 'zh-CN',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+  author: { '@type': 'Person', name: SITE.title },
+  publisher: { '@type': 'Organization', name: SITE.title },
+  keywords: [post.data.category, ...post.data.tags].join(', '),
+};
 ---
 
 <div class="post-layout">
   <article>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href={withBase(localizedHref(locale, '/'))}>{dict.navHome}</a>
+      <span class="sep">/</span>
+      <a href={withBase(localizedHref(locale, '/blog/'))}>{dict.navBlog}</a>
+      <span class="sep">/</span>
+      <span class="current">{post.data.title}</span>
+    </nav>
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
@@ -103,6 +127,8 @@ const related = getRelatedPosts(post, posts, 3);
     )
   }
 </div>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 <script>
   const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.post-toc a'));

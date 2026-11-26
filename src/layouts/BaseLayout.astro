@@ -97,6 +97,19 @@ const isActive = (href: string) => {
       ))
     }
 
+    <!-- 站点级结构化数据 -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: SITE.title,
+        description: SITE.description,
+        url: new URL(withBase(localizedHref(locale, '/')), SITE.url).toString(),
+        inLanguage: HTML_LANG[locale],
+      })}
+    />
+
     <!-- 主题：在首次绘制前定好，避免闪白 -->
     <script is:inline>
       (function () {
