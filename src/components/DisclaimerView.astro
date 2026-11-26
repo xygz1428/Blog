@@ -1,0 +1,144 @@
+---
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+
+const copy = {
+  'zh-cn': {
+    title: '免责声明',
+    updated: '最后更新：2026-11-27',
+    sections: [
+      {
+        h: '一、内容性质',
+        p: [
+          '本站是个人博客，所有文章仅代表作者个人的理解与观点，不构成任何专业建议（包括但不限于法律、医疗、投资、安全建议）。',
+          '文中涉及的技术方案、配置、命令均在作者的环境下验证过，但不保证在你的环境中同样有效。据此操作的风险由操作者自行承担。',
+        ],
+      },
+      {
+        h: '二、外部链接',
+        p: [
+          '本站的友链、参考站点与资源链接均指向第三方网站。本站无法控制这些站点的内容、可用性与隐私政策，也不对其内容负责。',
+          '链接的存在不代表本站对其内容的认可或背书。',
+        ],
+      },
+      {
+        h: '三、图片与素材',
+        p: [
+          '本站配图来自 Openverse 等提供 CC0 或自由授权内容的平台，每张图的来源与许可记录在仓库的「图片来源台账」中，可回溯。',
+          '部分页面仅以链接形式引用外部壁纸站（如哲风壁纸、4KDesk、必应壁纸），图片版权归各站及其授权方所有，本站不搬运、不缓存、不再分发这些图片。',
+          '若你是图片权利人并认为本站使用不当，请通过下方方式联系，核实后会立即删除。',
+        ],
+      },
+      {
+        h: '四、转载',
+        p: [
+          '欢迎转载本站原创内容，请注明作者与原文链接。',
+          '禁止将本站内容用于商业用途、二次售卖，或以洗稿方式冒充原创。',
+        ],
+      },
+      {
+        h: '五、隐私',
+        p: [
+          '本站是纯静态站点：没有账号系统、没有评论提交、没有数据库。',
+          '不设置追踪 Cookie，不引入第三方统计脚本。你的阅读行为不会被本站记录。',
+          '托管方 GitHub Pages 可能按其自身政策记录访问日志，这不在本站控制范围内。',
+        ],
+      },
+      {
+        h: '六、内容更新',
+        p: [
+          '文章可能随时修订或删除，恕不另行通知。技术类内容尤其容易过时，请留意发布时间。',
+        ],
+      },
+      {
+        h: '七、联系方式',
+        p: [
+          '如有版权、内容或合作相关事宜，欢迎在 GitHub 上提 Issue 或通过仓库主页联系。',
+        ],
+      },
+    ],
+  },
+  en: {
+    title: 'Disclaimer',
+    updated: 'Last updated: 2026-11-27',
+    sections: [
+      {
+        h: '1. Nature of content',
+        p: [
+          'This is a personal blog. Everything here reflects the author\'s own understanding and opinion, and does not constitute professional advice of any kind (legal, medical, financial, security, or otherwise).',
+          'Technical approaches, configurations and commands described here were verified in the author\'s environment only. They are not guaranteed to work in yours, and you assume the risk of following them.',
+        ],
+      },
+      {
+        h: '2. External links',
+        p: [
+          'Friend links, references and resource links point to third-party sites. This site does not control their content, availability or privacy practices, and is not responsible for them.',
+          'The presence of a link is not an endorsement of its content.',
+        ],
+      },
+      {
+        h: '3. Images and media',
+        p: [
+          'Illustrations come from Openverse and similar platforms that provide CC0 or freely licensed content. Every image\'s source and licence is recorded in the repository\'s image ledger and can be traced.',
+          'Some pages only link to external wallpaper sites (such as 哲风壁纸, 4KDesk, Bing Wallpaper). Copyright in those images belongs to their respective owners; this site does not copy, cache or redistribute them.',
+          'If you hold rights to an image and believe it is used improperly here, please get in touch and it will be removed after verification.',
+        ],
+      },
+      {
+        h: '4. Reuse',
+        p: [
+          'Republishing original content from this site is welcome, provided you credit the author and link to the original.',
+          'Commercial use, resale, or rewriting content to pass it off as original is not permitted.',
+        ],
+      },
+      {
+        h: '5. Privacy',
+        p: [
+          'This is a purely static site: no accounts, no comment submission, no database.',
+          'No tracking cookies and no third-party analytics scripts. Your reading behaviour is not recorded by this site.',
+          'The host, GitHub Pages, may keep access logs under its own policies; that is outside this site\'s control.',
+        ],
+      },
+      {
+        h: '6. Changes',
+        p: [
+          'Posts may be revised or removed at any time without notice. Technical content especially goes out of date — check the publication date.',
+        ],
+      },
+      {
+        h: '7. Contact',
+        p: [
+          'For copyright, content or collaboration matters, please open an issue on GitHub or reach out via the repository page.',
+        ],
+      },
+    ],
+  },
+} as const;
+
+const c = copy[locale];
+---
+
+<div class="page-head">
+  <h1>{c.title}</h1>
+  <p>{c.updated}</p>
+</div>
+
+<div class="wrap-narrow">
+  {
+    c.sections.map((section) => (
+      <section>
+        <h2>{section.h}</h2>
+        {section.p.map((text) => (
+          <p>{text}</p>
+        ))}
+      </section>
+    ))
+  }
+</div>

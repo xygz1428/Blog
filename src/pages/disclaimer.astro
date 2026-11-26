@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DisclaimerView from '../components/DisclaimerView.astro';
+import { DEFAULT_LOCALE } from '../i18n/ui';
+import { t } from '../i18n/utils';
+
+const dict = t(DEFAULT_LOCALE);
+---
+
+<BaseLayout
+  title={dict.navDisclaimer}
+  description={dict.navDisclaimer}
+  locale={DEFAULT_LOCALE}
+  altPaths={{ 'zh-cn': '/disclaimer/', en: '/disclaimer/' }}
+>
+  <DisclaimerView locale={DEFAULT_LOCALE} />
+</BaseLayout>

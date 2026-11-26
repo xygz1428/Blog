@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LinksView from '../../components/LinksView.astro';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../i18n/ui';
+import { t } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const dict = t(locale);
+---
+
+<BaseLayout title={dict.navLinks} locale={locale} altPaths={{ 'zh-cn': '/links/', en: '/links/' }}>
+  <LinksView locale={locale} />
+</BaseLayout>

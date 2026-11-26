@@ -12,6 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "new": "node scripts/new-post.mjs",
+    "translate": "node scripts/translate.mjs",
     "astro": "astro"
   },
   "dependencies": {

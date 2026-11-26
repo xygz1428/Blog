@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DisclaimerView from '../../components/DisclaimerView.astro';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../i18n/ui';
+import { t } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const dict = t(locale);
+---
+
+<BaseLayout
+  title={dict.navDisclaimer}
+  description={dict.navDisclaimer}
+  locale={locale}
+  altPaths={{ 'zh-cn': '/disclaimer/', en: '/disclaimer/' }}
+>
+  <DisclaimerView locale={locale} />
+</BaseLayout>

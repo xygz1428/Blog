@@ -41,6 +41,7 @@ const navItems = [
   { href: '/tags', label: dict.navTags },
   { href: '/search', label: dict.navSearch },
   { href: '/gallery', label: dict.navGallery },
+  { href: '/links', label: dict.navLinks },
   { href: '/about', label: dict.navAbout },
 ];
 
@@ -71,6 +72,8 @@ const isActive = (href: string) => {
       content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- 允许搜索引擎收录；声明不用于 AI 训练（依赖爬虫自觉遵守） -->
+    <meta name="robots" content="index, follow, noai, noimageai" />
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content={isPost ? 'article' : 'website'} />
@@ -153,6 +156,8 @@ const isActive = (href: string) => {
       <div class="wrap">
         <span>© {new Date().getFullYear()} {SITE.title} · {SITE.author}</span>
         <span>
+          <a href={withBase(localizedHref(locale, '/disclaimer/'))}>{dict.navDisclaimer}</a>
+          <span> · </span>
           <a href={withBase('/rss.xml')}>RSS</a>
           <span> · </span>
           <a href="https://astro.build" rel="noopener" target="_blank">Astro</a>
