@@ -9,9 +9,9 @@
 // 填好下面四项后留言区自动启用，配置方法见 docs/留言配置.md
 const GISCUS = {
   repo: 'xygz1428/Blog',
-  repoId: '',
-  category: 'Comments',
-  categoryId: '',
+  repoId: 'R_kgDOV9BBEw',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOV9BBE84DMCcx',
 };
 
 export const SITE = {
