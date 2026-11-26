@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostView from '../../../components/PostView.astro';
+import { getAllPosts, getTranslations, postSlug } from '../../../utils/posts';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const routes = [];
+  for (const locale of LOCALES.filter((l) => l !== DEFAULT_LOCALE)) {
+    const posts = await getAllPosts(locale);
+    for (const post of posts) {
+      routes.push({ params: { locale, slug: postSlug(post) }, props: { post, posts, locale } });
+    }
+  }
+  return routes;
+}
+
+const { post, posts, locale } = Astro.props as { post: any; posts: any[]; locale: Locale };
+const slug = postSlug(post);
+
+const translations = await getTranslations(slug);
+const altPaths: Record<string, string> = { 'zh-cn': `/blog/${slug}/` };
+for (const tr of translations) altPaths[tr.locale] = `/blog/${tr.slug}/`;
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description || post.data.title}
+  isPost
+  locale={locale}
+  altPaths={altPaths}
+>
+  <PostView post={post} posts={posts} locale={locale} />
+</BaseLayout>

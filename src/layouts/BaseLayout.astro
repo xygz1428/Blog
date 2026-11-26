@@ -1,6 +1,8 @@
 ---
 import { SITE } from '../site.mjs';
 import { withBase, stripBase } from '../utils/url';
+import { t, localizedHref } from '../i18n/utils';
+import { LOCALES, LOCALE_LABELS, HTML_LANG, DEFAULT_LOCALE, type Locale } from '../i18n/ui';
 import '../styles/global.css';
 // KaTeX 的排版样式（字体、间距、上下标）。不引入这行，公式会退化成无样式的字符。
 import 'katex/dist/katex.min.css';
@@ -10,17 +12,47 @@ interface Props {
   description?: string;
   /** 文章页传 true，标题就只显示文章名 */
   isPost?: boolean;
+  locale?: Locale;
+  /** 各语言下对应的路径，用于语言切换（缺省则回该语言首页） */
+  altPaths?: Partial<Record<Locale, string>>;
 }
 
-const { title, description = SITE.description, isPost = false } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  isPost = false,
+  locale = DEFAULT_LOCALE,
+  altPaths = {},
+} = Astro.props;
 
-const pageTitle = title ? (isPost ? `${title} · ${SITE.title}` : `${title} · ${SITE.title}`) : `${SITE.title} · ${SITE.tagline}`;
+const dict = t(locale);
+const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${dict.siteTagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com');
 const currentPath = stripBase(Astro.url.pathname);
+
+// 导航项：语言无关的路径 + 当前语言的文案
+const navItems = [
+  { href: '/', label: dict.navHome },
+  { href: '/blog', label: dict.navBlog },
+  { href: '/archive', label: dict.navArchive },
+  { href: '/tags', label: dict.navTags },
+  { href: '/search', label: dict.navSearch },
+  { href: '/about', label: dict.navAbout },
+];
+
+// 只有已本地化的页面才在英文/繁体导航里显示
+const localizedPages = new Set(['/', '/blog', '/about']);
+const visibleNav = locale === DEFAULT_LOCALE ? navItems : navItems.filter((i) => localizedPages.has(i.href));
+
+const isActive = (href: string) => {
+  const stripped = currentPath.replace(/\/$/, '') || '/';
+  const target = href === '/' ? '/' : href;
+  return stripped === target || (target !== '/' && stripped.startsWith(target));
+};
 ---
 
 <!doctype html>
-<html lang={SITE.lang} data-theme="light">
+<html lang={HTML_LANG[locale]} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,6 +61,13 @@ const currentPath = stripBase(Astro.url.pathname);
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href={withBase('/rss.xml')} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+
+    <!-- 安全策略：GitHub Pages 不支持自定义响应头，只能用 meta 形式 -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content={isPost ? 'article' : 'website'} />
@@ -39,6 +78,13 @@ const currentPath = stripBase(Astro.url.pathname);
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+
+    {
+      /* 多语言页面互相声明 hreflang，只列真实存在的版本 */
+      Object.entries(altPaths).map(([loc, path]) => (
+        <link rel="alternate" hreflang={HTML_LANG[loc as Locale]} href={new URL(localizedHref(loc as Locale, path), Astro.site ?? 'https://example.com')} />
+      ))
+    }
 
     <!-- 主题：在首次绘制前定好，避免闪白 -->
     <script is:inline>
@@ -59,19 +105,30 @@ const currentPath = stripBase(Astro.url.pathname);
     {isPost && <div class="reading-progress-bar" aria-hidden="true"><span id="progress-fill"></span></div>}
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href={withBase('/')}>{SITE.title}</a>
+        <a class="brand" href={withBase(localizedHref(locale, '/'))}>{SITE.title}</a>
         <nav class="nav">
           {
-            SITE.nav.map((item) => (
-              <a
-                href={withBase(item.href)}
-                aria-current={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href)) ? 'page' : undefined}
-              >
+            visibleNav.map((item) => (
+              <a href={withBase(localizedHref(locale, item.href))} aria-current={isActive(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
             ))
           }
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色/浅色模式">
+          <span class="lang-switch" aria-label={dict.langToggle}>
+            {
+              LOCALES.map((loc) => (
+                <a
+                  href={withBase(localizedHref(loc, altPaths[loc] ?? '/'))}
+                  class:list={['lang-link', { 'is-current': loc === locale }]}
+                  hreflang={HTML_LANG[loc]}
+                  aria-current={loc === locale ? 'true' : undefined}
+                >
+                  {LOCALE_LABELS[loc]}
+                </a>
+              ))
+            }
+          </span>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label={dict.themeToggle}>
             <span id="theme-icon">◐</span>
           </button>
         </nav>
@@ -95,9 +152,7 @@ const currentPath = stripBase(Astro.url.pathname);
       </div>
     </footer>
 
-    {isPost && (
-      <button class="scroll-to-top" id="scroll-top" type="button" aria-label="回到顶部">↑</button>
-    )}
+    {isPost && <button class="scroll-to-top" id="scroll-top" type="button" aria-label={dict.backToTop}>↑</button>}
 
     <script is:inline>
       (function () {
@@ -156,7 +211,6 @@ const currentPath = stripBase(Astro.url.pathname);
             await navigator.clipboard.writeText(code);
             button.textContent = '已复制';
           } catch {
-            // 不安全上下文或旧浏览器：退回到手动选中
             if (codeEl) {
               const range = document.createRange();
               range.selectNodeContents(codeEl);

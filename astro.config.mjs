@@ -15,6 +15,13 @@ export default defineConfig({
 
   integrations: [sitemap()],
 
+  // 三语：简体为默认语言（不带前缀），英文 / 繁体带前缀
+  i18n: {
+    defaultLocale: 'zh-cn',
+    locales: ['zh-cn', 'en', 'zh-tw'],
+    routing: { prefixDefaultLocale: false },
+  },
+
   markdown: {
     // Astro 7 起默认处理器不再内置公式支持，这里显式用 remark/rehype 管线
     processor: unified({

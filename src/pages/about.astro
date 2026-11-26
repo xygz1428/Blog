@@ -1,39 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE } from '../site.mjs';
+import AboutView from '../components/AboutView.astro';
+import { DEFAULT_LOCALE } from '../i18n/ui';
 ---
 
-<BaseLayout title="关于" description={`关于 ${SITE.title}`}>
-  <div class="page-head">
-    <h1>关于</h1>
-    <p>{SITE.tagline}</p>
-  </div>
-
-  <div class="wrap-narrow">
-    <p>
-      这里是我的个人博客，用来记录科研过程、编程实践、学习笔记，以及一些生活随笔。
-      建站的出发点很简单：把散落在笔记软件、聊天记录和脑子里的东西，整理成能长期检索的形式。
-    </p>
-
-    <h2>写什么</h2>
-    <ul>
-      <li><strong>科研</strong>：论文阅读、实验设计、数据处理与复现中的坑。</li>
-      <li><strong>技术</strong>：编程语言、工具链、工程实践与踩坑记录。</li>
-      <li><strong>学习</strong>：课程笔记、方法论、知识整理。</li>
-      <li><strong>生活</strong>：随笔、杂记，以及一些不一定有用的想法。</li>
-    </ul>
-
-    <h2>关于这个站</h2>
-    <p>
-      使用 <a href="https://astro.build" rel="noopener" target="_blank">Astro</a> 构建的静态站点，
-      文章用 Markdown 管理，托管在 GitHub Pages 上，推送即自动部署。
-      没有后端、没有数据库、没有追踪脚本——数据全部在 Git 仓库里。
-    </p>
-
-    <h2>联系</h2>
-    <p>
-      可以在 <a href="https://github.com/xygz1428" rel="noopener" target="_blank">GitHub</a> 找到我，
-      或者通过 <a href="/rss.xml">RSS</a> 订阅更新。
-    </p>
-  </div>
+<BaseLayout title="关于" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/about/', en: '/about/', 'zh-tw': '/about/' }}>
+  <AboutView locale={DEFAULT_LOCALE} />
 </BaseLayout>

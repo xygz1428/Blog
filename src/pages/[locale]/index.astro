@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomeView from '../../components/HomeView.astro';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+---
+
+<BaseLayout locale={locale} altPaths={{ 'zh-cn': '/', en: '/', 'zh-tw': '/' }}>
+  <HomeView locale={locale} />
+</BaseLayout>

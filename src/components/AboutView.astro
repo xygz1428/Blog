@@ -1,0 +1,90 @@
+---
+import { SITE } from '../site.mjs';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+
+const copy = {
+  'zh-cn': {
+    title: '关于',
+    intro:
+      '这里是我的个人博客，用来记录科研过程、编程实践、学习笔记，以及一些生活随笔。建站的出发点很简单：把散落在笔记软件、聊天记录和脑子里的东西，整理成能长期检索的形式。',
+    whatTitle: '写什么',
+    items: [
+      ['科研', '论文阅读、实验设计、数据处理与复现中的坑。'],
+      ['技术', '编程语言、工具链、工程实践与踩坑记录。'],
+      ['学习', '课程笔记、方法论、知识整理。'],
+      ['生活', '随笔、杂记，以及一些不一定有用的想法。'],
+    ],
+    stackTitle: '关于这个站',
+    stack:
+      '使用 Astro 构建的静态站点，文章用 Markdown 管理，托管在 GitHub Pages 上，推送即自动部署。没有后端、没有数据库、没有追踪脚本——数据全部在 Git 仓库里。',
+    contactTitle: '联系',
+    contact: '可以在 GitHub 找到我，或者通过 RSS 订阅更新。',
+  },
+  en: {
+    title: 'About',
+    intro:
+      'This is my personal blog: notes on research, engineering practice, study methods, and the occasional essay. The motivation is simple — to turn things scattered across note apps, chat logs and my head into something searchable years later.',
+    whatTitle: 'What I write about',
+    items: [
+      ['Research', 'Paper reading, experiment design, data processing and reproduction pitfalls.'],
+      ['Engineering', 'Languages, toolchains, engineering practice and lessons from bugs.'],
+      ['Learning', 'Course notes, methods, knowledge organisation.'],
+      ['Life', 'Essays and half-formed thoughts.'],
+    ],
+    stackTitle: 'About this site',
+    stack:
+      'A static site built with Astro. Posts are Markdown files, hosted on GitHub Pages and deployed automatically on push. No backend, no database, no tracking scripts — everything lives in a Git repository.',
+    contactTitle: 'Contact',
+    contact: 'Find me on GitHub, or subscribe via RSS.',
+  },
+  'zh-tw': {
+    title: '關於',
+    intro:
+      '這裡是我的個人部落格，用來記錄科研過程、程式實踐、學習筆記，以及一些生活隨筆。建站的出發點很簡單：把散落在筆記軟體、聊天記錄和腦子裡的東西，整理成能長期檢索的形式。',
+    whatTitle: '寫什麼',
+    items: [
+      ['科研', '論文閱讀、實驗設計、資料處理與重現中的坑。'],
+      ['技術', '程式語言、工具鏈、工程實踐與踩坑記錄。'],
+      ['學習', '課程筆記、方法論、知識整理。'],
+      ['生活', '隨筆、雜記，以及一些不一定有用的想法。'],
+    ],
+    stackTitle: '關於這個站',
+    stack:
+      '使用 Astro 建構的靜態網站，文章用 Markdown 管理，託管在 GitHub Pages 上，推送即自動部署。沒有後端、沒有資料庫、沒有追蹤腳本——資料全部在 Git 倉庫裡。',
+    contactTitle: '聯絡',
+    contact: '可以在 GitHub 找到我，或者透過 RSS 訂閱更新。',
+  },
+} as const;
+
+const c = copy[locale];
+---
+
+<div class="page-head">
+  <h1>{c.title}</h1>
+  <p>{dict.siteTagline}</p>
+</div>
+
+<div class="wrap-narrow">
+  <p>{c.intro}</p>
+
+  <h2>{c.whatTitle}</h2>
+  <ul>
+    {c.items.map(([name, desc]) => (
+      <li><strong>{name}</strong>：{desc}</li>
+    ))}
+  </ul>
+
+  <h2>{c.stackTitle}</h2>
+  <p>{c.stack}</p>
+
+  <h2>{c.contactTitle}</h2>
+  <p>{c.contact}</p>
+</div>

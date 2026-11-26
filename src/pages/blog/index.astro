@@ -1,51 +1,9 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllPosts, formatDate, postSlug } from '../../utils/posts';
-import { getCover } from '../../utils/covers';
-import { withBase } from '../../utils/url';
-
-const posts = await getAllPosts();
+import BlogListView from '../../components/BlogListView.astro';
+import { DEFAULT_LOCALE } from '../../i18n/ui';
 ---
 
-<BaseLayout title="文章">
-  <div class="page-head">
-    <h1>文章</h1>
-    <p>共 {posts.length} 篇</p>
-  </div>
-
-  {
-    posts.length === 0 ? (
-      <p class="empty">还没有文章。</p>
-    ) : (
-      <ul class="post-list">
-        {posts.map((post) => {
-          const cover = getCover(post.data.cover);
-          return (
-            <li class="post-item">
-              <div class="post-item-main">
-                <h2>
-                  <a href={withBase(`/blog/${postSlug(post)}/`)}>{post.data.title}</a>
-                </h2>
-                <div class="post-meta">
-                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-                  <span>·</span>
-                  <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
-                  {post.data.tags.map((tag) => (
-                    <a class="tag" href={withBase(`/tags/${tag}/`)}>{tag}</a>
-                  ))}
-                </div>
-                {post.data.description && <p class="post-desc">{post.data.description}</p>}
-              </div>
-              {cover && (
-                <a class="post-thumb" href={withBase(`/blog/${postSlug(post)}/`)} tabindex="-1" aria-hidden="true">
-                  <Image src={cover} alt="" width={200} height={140} format="webp" loading="lazy" />
-                </a>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    )
-  }
+<BaseLayout title="文章" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/blog/', en: '/blog/', 'zh-tw': '/blog/' }}>
+  <BlogListView locale={DEFAULT_LOCALE} />
 </BaseLayout>

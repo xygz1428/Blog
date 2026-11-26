@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import { SITE } from '../site.mjs';
+import { getAllPosts, getCategoryCounts, formatDate, postSlug } from '../utils/posts';
+import { getCover } from '../utils/covers';
+import { withBase } from '../utils/url';
+import { t, localizedHref } from '../i18n/utils';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const isDefault = locale === DEFAULT_LOCALE;
+
+const posts = await getAllPosts(locale);
+const latest = posts.slice(0, SITE.pageSize);
+const counts = await getCategoryCounts(locale);
+const heroCover = getCover('hero-quiet.jpg');
+---
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>{SITE.title}</h1>
+    <p>{dict.siteTagline}。</p>
+  </div>
+  {
+    heroCover && (
+      <div class="hero-media">
+        <Image src={heroCover} alt="" width={360} height={480} format="webp" loading="eager" />
+      </div>
+    )
+  }
+</section>
+
+<h2>{dict.latestPosts}</h2>
+{
+  latest.length === 0 ? (
+    <p class="empty">{dict.noPosts}</p>
+  ) : (
+    <ul class="post-list">
+      {latest.map((post) => {
+        const cover = getCover(post.data.cover);
+        const href = withBase(localizedHref(locale, `/blog/${postSlug(post)}/`));
+        return (
+          <li class="post-item">
+            <div class="post-item-main">
+              <h2>
+                <a href={href}>{post.data.title}</a>
+              </h2>
+              <div class="post-meta">
+                <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                <span>·</span>
+                {isDefault ? (
+                  <a href={withBase(`/categories/${post.data.category}/`)}>{post.data.category}</a>
+                ) : (
+                  <span>{post.data.category}</span>
+                )}
+                {post.data.tags.length > 0 && <span>·</span>}
+                {post.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+              {post.data.description && <p class="post-desc">{post.data.description}</p>}
+            </div>
+            {cover && (
+              <a class="post-thumb" href={href} tabindex="-1" aria-hidden="true">
+                <Image src={cover} alt="" width={200} height={140} format="webp" loading="lazy" />
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+<p style="margin-top:1.5rem">
+  <a href={withBase(localizedHref(locale, '/blog/'))}>{dict.allPosts} →</a>
+</p>
+
+<h2>{dict.categories}</h2>
+<ul class="cat-grid">
+  {
+    SITE.categories.map((category) => (
+      <li>
+        {isDefault ? (
+          <a class="cat-card" href={withBase(`/categories/${category}/`)}>
+            <strong>{category}</strong>
+            <span>{dict.postCount(counts[category] ?? 0)}</span>
+          </a>
+        ) : (
+          <div class="cat-card">
+            <strong>{category}</strong>
+            <span>{dict.postCount(counts[category] ?? 0)}</span>
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>
