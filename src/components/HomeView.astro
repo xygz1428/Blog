@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { SITE } from '../site.mjs';
 import { getAllPosts, getCategoryCounts, formatDate, postSlug } from '../utils/posts';
 import { getCover } from '../utils/covers';
+import heroImg from '../assets/hero.jpg';
 import { withBase } from '../utils/url';
 import { t, localizedHref, categoryLabel } from '../i18n/utils';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
@@ -20,7 +21,25 @@ const latest = posts.slice(0, SITE.pageSize);
 // 首篇做大卡片，其余紧凑列表（视觉主次）
 const [featured, ...rest] = latest;
 const counts = await getCategoryCounts(locale);
-const heroCover = getCover('hero-quiet.jpg');
+const heroCover = heroImg;
+
+// 首页大标题与副标题（按语言）
+const heroCopy = {
+  'zh-cn': {
+    title: '记录科研、技术与生活',
+    sub: 'Notes on research, engineering and everyday life.',
+    lead: '这里记录科研过程、编程实践、学习笔记，以及一些生活随笔。慢一点写，写长一点。',
+    tag: 'CC0 配图',
+  },
+  en: {
+    title: 'Notes on research, engineering and life',
+    sub: '记录科研、技术与生活。',
+    lead: 'A place for research notes, engineering practice, study logs and the occasional essay. Written slowly, and at length.',
+    tag: 'CC0 images',
+  },
+} as const;
+
+const hc = heroCopy[locale];
 
 // 非默认语言下只显示有文章的分类，避免一堆「0 posts」
 const visibleCategories = isDefault
@@ -30,13 +49,20 @@ const visibleCategories = isDefault
 
 <section class="hero">
   <div class="hero-text">
-    <h1>{SITE.title}</h1>
-    <p>{dict.siteTagline}。</p>
+    <div class="hero-eyebrow">
+      <span>+ A small blog for long thinking</span>
+      <span>Est. 2026</span>
+    </div>
+    <h1>{hc.title}<span class="hero-mark">。</span></h1>
+    <p class="hero-sub">{hc.sub}</p>
+    <p class="hero-lead">{hc.lead}</p>
   </div>
   {
     heroCover && (
-      <div class="hero-media">
-        <Image src={heroCover} alt="" width={360} height={480} format="webp" loading="eager" />
+      <div class="hero-card">
+        <Image src={heroCover} alt="" width={720} height={540} format="webp" loading="eager" />
+        <span class="hero-tag hero-tag-a">{dict.postCount(posts.length)}</span>
+        <span class="hero-tag hero-tag-b">{hc.tag}</span>
       </div>
     )
   }

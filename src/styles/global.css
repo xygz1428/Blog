@@ -847,13 +847,17 @@ pre.astro-code:hover .copy-btn,
 }
 
 .hero-media {
-  flex: 0 0 13rem;
+  flex: 0 0 22rem;
+  overflow: hidden;
+  border-radius: var(--radius);
 }
 
 .hero-media img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--border);
 }
@@ -1137,4 +1141,249 @@ pre.astro-code:hover .copy-btn,
 @media (prefers-reduced-motion: reduce) {
   .link-card { transition: none; }
   .link-card:hover { transform: none; }
+}
+/* ── 首页 hero（大字报风格）────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 0.5rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 3.5rem;
+  }
+}
+
+.hero-text {
+  min-width: 0;
+}
+
+.hero-eyebrow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 1.6rem;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.1rem, 5.2vw, 3.9rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--fg);
+}
+
+.hero-mark {
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--accent);
+  margin: 0 0 1.5rem;
+}
+
+.hero-lead {
+  color: var(--fg-muted);
+  max-width: 30rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.hero-card {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-card, #fffdf9);
+  line-height: 0;
+}
+
+.hero-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.hero-tag {
+  position: absolute;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: var(--bg-card, #fffdf9);
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  box-shadow: 0 2px 8px rgba(31, 27, 23, 0.06);
+}
+
+.hero-tag-a {
+  left: 0.9rem;
+  bottom: 0.9rem;
+}
+
+.hero-tag-b {
+  right: 0.9rem;
+  top: 0.9rem;
+}
+
+@media (max-width: 899px) {
+  .hero-card img {
+    aspect-ratio: 16 / 9;
+  }
+  .hero-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+  }
+}
+/* ── 导航胶囊（参考 darkkandaomaster）──────────────────── */
+
+.nav {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.nav > a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-bottom: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav > a:hover {
+  background: var(--bg-soft);
+  color: var(--fg);
+  border-bottom-color: transparent;
+  text-decoration: none;
+}
+
+.nav > a[aria-current='page'] {
+  color: var(--fg);
+  background: var(--bg-card, #fffdf9);
+  box-shadow: inset 0 0 0 1px var(--border);
+  border-bottom-color: transparent;
+}
+
+.nav-num {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--fg-faint);
+  letter-spacing: 0;
+}
+
+.nav > a[aria-current='page'] .nav-num {
+  color: var(--accent);
+}
+
+/* 品牌旁的状态点 */
+.brand-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: blink 2.4s steps(1, end) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.15; }
+}
+
+@media (max-width: 640px) {
+  .nav {
+    gap: 2px;
+  }
+  .nav > a {
+    padding: 6px 9px;
+    font-size: 0.84rem;
+  }
+  .nav-num {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-dot { animation: none; }
+}
+/* ── hero 细节：字号刻度 + 手写下划线 + 浮动标签 ──────── */
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* 标题下方的手写感横线，入场时从左「画」出来 */
+.hero h1::after {
+  content: '';
+  display: block;
+  width: 4.5rem;
+  height: 3px;
+  margin-top: 0.7rem;
+  background: var(--accent);
+  border-radius: 2px;
+  transform-origin: left center;
+  animation: draw 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+
+@keyframes draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* 卡片圆角与参考站对齐 */
+.hero-card {
+  border-radius: 18px;
+}
+
+.post-featured {
+  border-radius: 14px;
+}
+
+/* 浮动小标签 */
+.hero-tag {
+  animation: bob 5s ease-in-out infinite;
+}
+
+.hero-tag-b {
+  animation-delay: -2.5s;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1::after { animation: none; }
+  .hero-tag { animation: none; }
 }

@@ -116,11 +116,12 @@ const isActive = (href: string) => {
     {isPost && <div class="reading-progress-bar" aria-hidden="true"><span id="progress-fill"></span></div>}
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href={withBase(localizedHref(locale, '/'))}>{SITE.title}</a>
+        <a class="brand" href={withBase(localizedHref(locale, '/'))}><span class="brand-dot" aria-hidden="true"></span>{SITE.title}</a>
         <nav class="nav">
           {
-            visibleNav.map((item) => (
+            visibleNav.map((item, index) => (
               <a href={withBase(localizedHref(locale, item.href))} aria-current={isActive(item.href) ? 'page' : undefined}>
+                <span class="nav-num">{String(index + 1).padStart(2, '0')}</span>
                 {item.label}
               </a>
             ))
