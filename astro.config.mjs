@@ -21,9 +21,13 @@ export default defineConfig({
       remarkPlugins: [remarkMath],
       rehypePlugins: [rehypeKatex],
     }),
-    // 代码高亮：浅色/深色双主题，跟随 data-theme 切换
-    syntaxHighlight: {
-      type: 'shiki',
+
+    // 语法高亮类型；具体主题在下面的 shikiConfig 里配
+    // 注意：syntaxHighlight 只认 type / excludeLangs，写 themes 会被静默忽略
+    syntaxHighlight: { type: 'shiki' },
+
+    shikiConfig: {
+      // 浅色/深色双主题：Shiki 输出 CSS 变量，由 global.css 的 [data-theme='dark'] 切换
       themes: { light: 'github-light', dark: 'github-dark' },
       wrap: true,
     },
