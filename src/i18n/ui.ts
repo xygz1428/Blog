@@ -2,7 +2,7 @@
  * 界面文案字典。新增语言：加一个 key，补齐全部字段。
  * 文章正文的翻译不在这里，在 src/content/blog/<locale>/ 下。
  */
-export const LOCALES = ['zh-cn', 'en', 'zh-tw'] as const;
+export const LOCALES = ['zh-cn', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'zh-cn';
 
@@ -10,14 +10,12 @@ export const DEFAULT_LOCALE: Locale = 'zh-cn';
 export const LOCALE_LABELS: Record<Locale, string> = {
   'zh-cn': '简',
   en: 'EN',
-  'zh-tw': '繁',
 };
 
 /** <html lang> 用的标准标签 */
 export const HTML_LANG: Record<Locale, string> = {
   'zh-cn': 'zh-CN',
   en: 'en',
-  'zh-tw': 'zh-TW',
 };
 
 /**
@@ -28,7 +26,6 @@ export const HTML_LANG: Record<Locale, string> = {
 export const CATEGORY_LABELS: Record<Locale, Record<string, string>> = {
   'zh-cn': { 科研: '科研', 技术: '技术', 学习: '学习', 生活: '生活' },
   en: { 科研: 'Research', 技术: 'Engineering', 学习: 'Learning', 生活: 'Life' },
-  'zh-tw': { 科研: '科研', 技术: '技術', 学习: '學習', 生活: '生活' },
 };
 
 export const ui = {
@@ -107,44 +104,6 @@ export const ui = {
     notFoundBack: 'Back to home',
     noTranslation: 'This post is not available in another language yet',
     footerRights: 'All rights reserved',
-  },
-  'zh-tw': {
-    siteTagline: '記錄科研、技術、學習與生活',
-    siteDescription: 'Blog —— 一個用來記錄科研、程式技術、學習筆記與生活隨筆的個人部落格。',
-    navHome: '首頁',
-    navBlog: '文章',
-    navArchive: '歸檔',
-    navTags: '標籤',
-    navSearch: '搜尋',
-    navAbout: '關於',
-    themeToggle: '切換深色/淺色模式',
-    langToggle: '切換語言',
-    latestPosts: '最新文章',
-    allPosts: '查看全部文章',
-    categories: '分類',
-    postCount: (n: number) => `共 ${n} 篇`,
-    readingTime: (n: number) => `${n} 分鐘閱讀`,
-    updatedAt: '更新於',
-    noPosts: '還沒有文章。',
-    prevPost: '上一篇',
-    nextPost: '下一篇',
-    toc: '目錄',
-    copyCode: '複製',
-    copied: '已複製',
-    backToTop: '回到頂部',
-    searchPlaceholder: '搜尋文章…',
-    searchPrompt: '輸入關鍵字開始搜尋。',
-    searchNoResults: (q: string) => `沒有找到與「${q}」相關的文章。`,
-    archiveTitle: '歸檔',
-    archiveSubtitle: '按年月排列',
-    tagsTitle: '標籤',
-    tagsSubtitle: (tags: number, uses: number) => `共 ${tags} 個標籤 · ${uses} 次使用`,
-    categoryTitle: '分類',
-    notFoundTitle: '頁面不存在',
-    notFoundDesc: '這個頁面不存在，或者已經搬走了。',
-    notFoundBack: '回首頁',
-    noTranslation: '這篇文章暫無其他語言版本',
-    footerRights: '保留所有權利',
   },
 } as const;
 

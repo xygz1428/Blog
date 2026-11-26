@@ -1,0 +1,44 @@
+---
+import { getPostsByCategory, formatDate, postSlug } from '../utils/posts';
+import { withBase } from '../utils/url';
+import { t, localizedHref, categoryLabel } from '../i18n/utils';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  category: string;
+}
+
+const { locale, category } = Astro.props;
+const dict = t(locale);
+const isDefault = locale === DEFAULT_LOCALE;
+const posts = await getPostsByCategory(category, locale);
+---
+
+<div class="page-head">
+  <h1>{categoryLabel(locale, category)}</h1>
+  <p>{dict.postCount(posts.length)} · <a href={withBase(localizedHref(locale, '/blog/'))}>{dict.navBlog}</a></p>
+</div>
+
+{
+  posts.length === 0 ? (
+    <p class="empty">{dict.noPosts}</p>
+  ) : (
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li class="post-item">
+          <div class="post-item-main">
+            <h2><a href={withBase(localizedHref(locale, `/blog/${postSlug(post)}/`))}>{post.data.title}</a></h2>
+            <div class="post-meta">
+              <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              {post.data.tags.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+            {post.data.description && <p class="post-desc">{post.data.description}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}

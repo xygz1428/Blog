@@ -43,9 +43,8 @@ const navItems = [
   { href: '/about', label: dict.navAbout },
 ];
 
-// 只有已本地化的页面才在英文/繁体导航里显示
-const localizedPages = new Set(['/', '/blog', '/about']);
-const visibleNav = locale === DEFAULT_LOCALE ? navItems : navItems.filter((i) => localizedPages.has(i.href));
+// 所有页面均已三语化，导航项在各语言下都显示
+const visibleNav = navItems;
 
 const isActive = (href: string) => {
   const stripped = currentPath.replace(/\/$/, '') || '/';

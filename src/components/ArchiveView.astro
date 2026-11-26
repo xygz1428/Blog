@@ -1,0 +1,58 @@
+---
+import { getPostsByYear, formatDate, postSlug, type Post } from '../utils/posts';
+import { withBase } from '../utils/url';
+import { t, localizedHref, categoryLabel } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const groups = await getPostsByYear(locale);
+const total = groups.reduce((sum, g) => sum + g.posts.length, 0);
+
+function groupByMonth(posts: Post[]) {
+  const map = new Map<number, Post[]>();
+  for (const post of posts) {
+    const month = post.data.pubDate.getMonth() + 1;
+    if (!map.has(month)) map.set(month, []);
+    map.get(month)!.push(post);
+  }
+  return [...map.entries()].sort((a, b) => b[0] - a[0]).map(([month, list]) => ({ month, posts: list }));
+}
+---
+
+<div class="page-head">
+  <h1>{dict.archiveTitle}</h1>
+  <p>{dict.postCount(total)} · {dict.archiveSubtitle}</p>
+</div>
+
+{
+  groups.length === 0 ? (
+    <p class="empty">{dict.noPosts}</p>
+  ) : (
+    groups.map((group) => (
+      <section class="archive-year-block">
+        <h2 class="archive-year">
+          {group.year}
+          <span class="archive-count">{dict.postCount(group.posts.length)}</span>
+        </h2>
+        {groupByMonth(group.posts).map((monthGroup) => (
+          <div class="archive-month">
+            <div class="archive-month-label">{monthGroup.month} 月</div>
+            <ul class="archive-list">
+              {monthGroup.posts.map((post) => (
+                <li>
+                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                  <a href={withBase(localizedHref(locale, `/blog/${postSlug(post)}/`))}>{post.data.title}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    ))
+  )
+}

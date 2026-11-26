@@ -15,10 +15,10 @@ export default defineConfig({
 
   integrations: [sitemap()],
 
-  // 三语：简体为默认语言（不带前缀），英文 / 繁体带前缀
+  // 双语：简体为默认语言（不带前缀），英文带前缀
   i18n: {
     defaultLocale: 'zh-cn',
-    locales: ['zh-cn', 'en', 'zh-tw'],
+    locales: ['zh-cn', 'en'],
     routing: { prefixDefaultLocale: false },
   },
 

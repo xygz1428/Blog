@@ -12,7 +12,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const imageDir = join(root, 'src', 'content', 'blog', 'images');
+const defaultDir = join(root, 'src', 'content', 'blog', 'images');
 const ledger = join(root, 'docs', '图片来源台账.md');
 
 const args = process.argv.slice(2);
@@ -31,8 +31,12 @@ const outName = getFlag('out', query.replace(/[^a-z0-9]+/gi, '-').toLowerCase())
 const pick = Number(getFlag('pick', '0'));
 // --cc0：只要 CC0（无需署名），用于避免署名义务
 const cc0Only = args.includes('--cc0');
+// --gif：只搜动图；--outdir：指定输出目录（相对项目根）
+const gifOnly = args.includes('--gif');
+const imageDir = join(root, getFlag('outdir', 'src/content/blog/images'));
 
-const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial`;
+const gifParam = gifOnly ? '&extension=gif' : '';
+const API = `https://api.openverse.org/v1/images/?q=${encodeURIComponent(query)}&page_size=20&license_type=commercial${gifParam}`;
 
 const res = await fetch(API, { headers: { 'User-Agent': 'kblog-image-fetcher' } });
 if (!res.ok) {
@@ -56,7 +60,7 @@ if (pick >= candidates.length) {
 }
 
 const item = candidates[pick];
-const ext = (item.url.match(/\.(jpe?g|png|webp)(\?|$)/i)?.[1] ?? 'jpg').toLowerCase().replace('jpeg', 'jpg');
+const ext = (item.url.match(/\.(jpe?g|png|webp|gif)(\?|$)/i)?.[1] ?? 'jpg').toLowerCase().replace('jpeg', 'jpg');
 const fileName = `${outName}.${ext}`;
 const filePath = join(imageDir, fileName);
 
@@ -72,7 +76,8 @@ if (!imgRes.ok) {
   process.exit(1);
 }
 const buffer = Buffer.from(await imgRes.arrayBuffer());
-if (buffer.length > 1_500_000) {
+const sizeLimit = gifOnly ? 4_000_000 : 1_500_000;
+if (buffer.length > sizeLimit) {
   console.error(`图片过大（${(buffer.length / 1024 / 1024).toFixed(1)} MB），换一张`);
   process.exit(1);
 }

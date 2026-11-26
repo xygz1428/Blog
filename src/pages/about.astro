@@ -4,6 +4,6 @@ import AboutView from '../components/AboutView.astro';
 import { DEFAULT_LOCALE } from '../i18n/ui';
 ---
 
-<BaseLayout title="关于" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/about/', en: '/about/', 'zh-tw': '/about/' }}>
+<BaseLayout title="关于" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/about/', en: '/about/' }}>
   <AboutView locale={DEFAULT_LOCALE} />
 </BaseLayout>

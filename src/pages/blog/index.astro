@@ -4,6 +4,6 @@ import BlogListView from '../../components/BlogListView.astro';
 import { DEFAULT_LOCALE } from '../../i18n/ui';
 ---
 
-<BaseLayout title="文章" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/blog/', en: '/blog/', 'zh-tw': '/blog/' }}>
+<BaseLayout title="文章" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/blog/', en: '/blog/' }}>
   <BlogListView locale={DEFAULT_LOCALE} />
 </BaseLayout>

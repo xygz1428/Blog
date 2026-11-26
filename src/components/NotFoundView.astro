@@ -1,0 +1,25 @@
+---
+import { t } from '../i18n/utils';
+import { withBase } from '../utils/url';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<div class="page-head">
+  <h1>404</h1>
+  <p>{dict.notFoundDesc}</p>
+</div>
+
+<div class="wrap-narrow">
+  <p style="margin-top:2rem">
+    <a href={withBase(locale === 'zh-cn' ? '/' : `/${locale}/`)}>← {dict.notFoundBack}</a>
+    <span> · </span>
+    <a href={withBase(locale === 'zh-cn' ? '/blog/' : `/${locale}/blog/`)}>{dict.navBlog}</a>
+  </p>
+</div>

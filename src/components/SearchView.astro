@@ -1,0 +1,123 @@
+---
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<div class="page-head">
+  <h1>{dict.navSearch}</h1>
+  <p>{dict.searchPrompt}</p>
+</div>
+
+<div
+  id="search-app"
+  data-prompt={dict.searchPrompt}
+  data-noresults={dict.searchNoResults('__Q__')}
+  data-postcount-label={dict.postCount(0).replace('0', '')}
+>
+  <input class="search-box" id="q" type="search" placeholder={dict.searchPlaceholder} autocomplete="off" autofocus />
+  <p class="empty" id="status">{dict.searchPrompt}</p>
+  <ul class="post-list" id="results"></ul>
+</div>
+
+<script>
+  const root = document.getElementById('search-app');
+  const input = document.getElementById('q') as HTMLInputElement | null;
+  const status = document.getElementById('status');
+  const list = document.getElementById('results');
+
+  const promptText = root?.dataset.prompt ?? '';
+  const noResultsTpl = root?.dataset.noresults ?? '__Q__';
+
+  type Item = {
+    title: string;
+    description: string;
+    category: string;
+    tags: string[];
+    date: string;
+    url: string;
+    body: string;
+  };
+
+  let index: Item[] = [];
+  let loaded = false;
+
+  async function ensureIndex() {
+    if (loaded) return;
+    const res = await fetch(`${import.meta.env.BASE_URL}search.json`);
+    index = await res.json();
+    loaded = true;
+  }
+
+  function escapeHtml(text: string) {
+    return text.replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string
+    );
+  }
+
+  function render(items: Item[], query: string) {
+    if (!list || !status) return;
+    if (query.trim() === '') {
+      list.innerHTML = '';
+      status.textContent = promptText;
+      status.style.display = '';
+      return;
+    }
+    if (items.length === 0) {
+      list.innerHTML = '';
+      status.textContent = noResultsTpl.replace('__Q__', query);
+      status.style.display = '';
+      return;
+    }
+    status.style.display = 'none';
+    list.innerHTML = items
+      .map(
+        (item) => `
+        <li class="post-item">
+          <div class="post-item-main">
+            <h2><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h2>
+            <div class="post-meta">
+              <span>${escapeHtml(item.date)}</span><span>·</span>
+              <span>${escapeHtml(item.category)}</span>
+              ${item.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+            </div>
+            ${item.description ? `<p class="post-desc">${escapeHtml(item.description)}</p>` : ''}
+          </div>
+        </li>`
+      )
+      .join('');
+  }
+
+  function search(query: string) {
+    const q = query.trim().toLowerCase();
+    if (q === '') return [];
+    const terms = q.split(/\s+/).filter(Boolean);
+    return index
+      .map((item) => {
+        const haystack = `${item.title} ${item.description} ${item.category} ${item.tags.join(' ')} ${item.body}`.toLowerCase();
+        let score = 0;
+        for (const term of terms) {
+          if (item.title.toLowerCase().includes(term)) score += 5;
+          else if (item.tags.join(' ').toLowerCase().includes(term)) score += 3;
+          else if (item.description.toLowerCase().includes(term)) score += 2;
+          else if (haystack.includes(term)) score += 1;
+        }
+        return { item, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map((entry) => entry.item);
+  }
+
+  input?.addEventListener('input', async (event) => {
+    const value = (event.target as HTMLInputElement).value;
+    await ensureIndex();
+    render(search(value), value);
+  });
+</script>

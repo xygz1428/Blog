@@ -1,105 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { withBase } from '../utils/url';
+import SearchView from '../components/SearchView.astro';
+import { DEFAULT_LOCALE } from '../i18n/ui';
+import { t } from '../i18n/utils';
+
+const dict = t(DEFAULT_LOCALE);
 ---
 
-<BaseLayout title="搜索" description="站内搜索">
-  <div class="page-head">
-    <h1>搜索</h1>
-    <p>输入关键词，匹配标题、摘要、分类、标签与正文</p>
-  </div>
-
-  <input class="search-box" id="q" type="search" placeholder="搜索文章…" autocomplete="off" autofocus />
-  <p class="empty" id="status">输入关键词开始搜索。</p>
-  <ul class="post-list" id="results"></ul>
+<BaseLayout
+  title={dict.navSearch}
+  locale={DEFAULT_LOCALE}
+  altPaths={{ 'zh-cn': '/search/', en: '/search/' }}
+>
+  <SearchView locale={DEFAULT_LOCALE} />
 </BaseLayout>
-
-<script>
-  const input = document.getElementById('q') as HTMLInputElement | null;
-  const status = document.getElementById('status');
-  const list = document.getElementById('results');
-
-  type Item = {
-    title: string;
-    description: string;
-    category: string;
-    tags: string[];
-    date: string;
-    url: string;
-    body: string;
-  };
-
-  let index: Item[] = [];
-  let loaded = false;
-
-  async function ensureIndex() {
-    if (loaded) return;
-    const res = await fetch(`${import.meta.env.BASE_URL}search.json`);
-    index = await res.json();
-    loaded = true;
-  }
-
-  function escapeHtml(text: string) {
-    return text.replace(/[&<>"']/g, (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string
-    );
-  }
-
-  function render(items: Item[], query: string) {
-    if (!list || !status) return;
-    if (query.trim() === '') {
-      list.innerHTML = '';
-      status.textContent = '输入关键词开始搜索。';
-      status.style.display = '';
-      return;
-    }
-    if (items.length === 0) {
-      list.innerHTML = '';
-      status.textContent = `没有找到与「${query}」相关的文章。`;
-      status.style.display = '';
-      return;
-    }
-    status.style.display = 'none';
-    list.innerHTML = items
-      .map(
-        (item) => `
-        <li class="post-item">
-          <h2><a href="${item.url}">${escapeHtml(item.title)}</a></h2>
-          <div class="post-meta">
-            <span>${item.date}</span><span>·</span>
-            <span>${escapeHtml(item.category)}</span>
-            ${item.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
-          </div>
-          ${item.description ? `<p class="post-desc">${escapeHtml(item.description)}</p>` : ''}
-        </li>`
-      )
-      .join('');
-  }
-
-  function search(query: string) {
-    const q = query.trim().toLowerCase();
-    if (q === '') return [];
-    const terms = q.split(/\s+/).filter(Boolean);
-    return index
-      .map((item) => {
-        const haystack = `${item.title} ${item.description} ${item.category} ${item.tags.join(' ')} ${item.body}`.toLowerCase();
-        let score = 0;
-        for (const term of terms) {
-          if (item.title.toLowerCase().includes(term)) score += 5;
-          else if (item.tags.join(' ').toLowerCase().includes(term)) score += 3;
-          else if (item.description.toLowerCase().includes(term)) score += 2;
-          else if (haystack.includes(term)) score += 1;
-        }
-        return { item, score };
-      })
-      .filter((entry) => entry.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map((entry) => entry.item);
-  }
-
-  input?.addEventListener('input', async (event) => {
-    const value = (event.target as HTMLInputElement).value;
-    await ensureIndex();
-    render(search(value), value);
-  });
-</script>

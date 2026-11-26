@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CategoryView from '../../../components/CategoryView.astro';
+import { SITE } from '../../../site.mjs';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  const routes = [];
+  for (const locale of LOCALES.filter((l) => l !== DEFAULT_LOCALE)) {
+    for (const category of SITE.categories) routes.push({ params: { locale, category } });
+  }
+  return routes;
+}
+
+const locale = Astro.params.locale as Locale;
+const category = Astro.params.category as string;
+---
+
+<BaseLayout title={category} locale={locale}>
+  <CategoryView locale={locale} category={category} />
+</BaseLayout>

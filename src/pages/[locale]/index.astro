@@ -10,6 +10,6 @@ export function getStaticPaths() {
 const locale = Astro.params.locale as Locale;
 ---
 
-<BaseLayout locale={locale} altPaths={{ 'zh-cn': '/', en: '/', 'zh-tw': '/' }}>
+<BaseLayout locale={locale} altPaths={{ 'zh-cn': '/', en: '/' }}>
   <HomeView locale={locale} />
 </BaseLayout>

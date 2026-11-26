@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TagsView from '../../../components/TagsView.astro';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../../i18n/ui';
+import { t } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const dict = t(locale);
+---
+
+<BaseLayout
+  title={dict.tagsTitle}
+  locale={locale}
+  altPaths={{ 'zh-cn': '/tags/', en: '/tags/' }}
+>
+  <TagsView locale={locale} />
+</BaseLayout>
