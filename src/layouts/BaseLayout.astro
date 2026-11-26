@@ -173,6 +173,55 @@ const currentPath = stripBase(Astro.url.pathname);
 
         pre.appendChild(button);
       }
+
+      // ── 图注：图片下一行的纯斜体段落 → figcaption ──────────
+      for (const img of Array.from(document.querySelectorAll<HTMLImageElement>('.post-body img'))) {
+        const holder = img.parentElement;
+        if (!holder || holder.tagName !== 'P') continue;
+        const next = holder.nextElementSibling;
+        const isCaption =
+          next !== null &&
+          next.tagName === 'P' &&
+          next.children.length === 1 &&
+          next.firstElementChild?.tagName === 'EM';
+        if (!isCaption) continue;
+
+        const figure = document.createElement('figure');
+        holder.parentNode?.insertBefore(figure, holder);
+        figure.appendChild(img);
+        const caption = document.createElement('figcaption');
+        caption.textContent = next.firstElementChild?.textContent ?? '';
+        figure.appendChild(caption);
+        next.remove();
+        if ((holder.textContent ?? '').trim() === '') holder.remove();
+      }
+
+      // ── 图片灯箱 ──────────────────────────────────────────
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.setAttribute('role', 'dialog');
+      lightbox.setAttribute('aria-label', '图片预览');
+      const lightboxImg = document.createElement('img');
+      lightbox.appendChild(lightboxImg);
+      document.body.appendChild(lightbox);
+
+      const closeLightbox = () => {
+        lightbox.classList.remove('is-open');
+        lightboxImg.removeAttribute('src');
+      };
+
+      for (const img of Array.from(document.querySelectorAll<HTMLImageElement>('.post-body img'))) {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.currentSrc || img.src;
+          lightboxImg.alt = img.alt;
+          lightbox.classList.add('is-open');
+        });
+      }
+
+      lightbox.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeLightbox();
+      });
     </script>
   </body>
 </html>
