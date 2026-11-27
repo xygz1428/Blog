@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AboutView from '../../components/AboutView.astro';
-import ParticlesClassic from '../../components/ParticlesClassic.astro';
+import ParticleBackdrop from '../../components/ParticleBackdrop.astro';
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../i18n/ui';
 import { t } from '../../i18n/utils';
 
@@ -18,6 +18,6 @@ const dict = t(locale);
   locale={locale}
   altPaths={{ 'zh-cn': '/about/', en: '/about/' }}
 >
-  <ParticlesClassic />
+  <ParticleBackdrop variant="page" count={45} linkDistance={150} sizeMin={3} sizeMax={7} />
   <AboutView locale={locale} />
 </BaseLayout>

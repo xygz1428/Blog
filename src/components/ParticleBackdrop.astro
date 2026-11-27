@@ -59,7 +59,7 @@ const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 2, sizeMax =
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
       size: SMIN + Math.random() * (SMAX - SMIN),
-      alpha: 0.16 + Math.random() * 0.3,
+      alpha: 0.28 + Math.random() * 0.35,
     });
 
     const resize = () => {
@@ -121,7 +121,7 @@ const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 2, sizeMax =
           const b2 = points[j];
           const d = Math.hypot(a.x - b2.x, a.y - b2.y);
           if (d < LINK) {
-            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.26 * (1 - d / LINK)})`;
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.38 * (1 - d / LINK)})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b2.x, b2.y);

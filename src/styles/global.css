@@ -18,7 +18,7 @@
   --accent: #e2672b;      /* 强调色 */
   --accent-soft: #f9e2d1; /* 强调浅底 */
   --code-bg: #ece6dc;
-  --particle-color: #cbb5a8;
+  --particle-color: #b39aa8;
 
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --sans: 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -1796,7 +1796,7 @@ main,
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 46% 58% at 50% 42%,
+    ellipse 38% 50% at 50% 45%,
     var(--bg) 0%,
     var(--bg) 52%,
     color-mix(in srgb, var(--bg) 55%, transparent) 78%,

@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AboutView from '../components/AboutView.astro';
-import ParticlesClassic from '../components/ParticlesClassic.astro';
+import ParticleBackdrop from '../components/ParticleBackdrop.astro';
 import { DEFAULT_LOCALE } from '../i18n/ui';
 ---
 
 <BaseLayout title="关于" locale={DEFAULT_LOCALE} altPaths={{ 'zh-cn': '/about/', en: '/about/' }}>
-  <ParticlesClassic />
+  <ParticleBackdrop variant="page" count={45} linkDistance={150} sizeMin={3} sizeMax={7} />
   <AboutView locale={DEFAULT_LOCALE} />
 </BaseLayout>
