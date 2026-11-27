@@ -14,8 +14,28 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, '') + '/';
 
 <script is:inline src={`${base}vendor/particles.min.js`}></script>
 <script is:inline define:vars={{ base }}>
-  window.addEventListener('load', function () {
-    if (typeof particlesJS === 'undefined') return;
-    particlesJS.load('particles-js', base + 'vendor/particles-config.json', function () {});
-  });
+  (function () {
+    function init() {
+      var el = document.getElementById('particles-js');
+      if (!el || typeof particlesJS === 'undefined') return;
+
+      // particles.js 会用 offsetWidth/offsetHeight 定画布尺寸，
+      // 某些布局下这个值不可靠，这里先显式写死像素尺寸再初始化。
+      el.style.width = window.innerWidth + 'px';
+      el.style.height = window.innerHeight + 'px';
+
+      particlesJS.load('particles-js', base + 'vendor/particles-config.json', function () {});
+
+      window.addEventListener('resize', function () {
+        el.style.width = window.innerWidth + 'px';
+        el.style.height = window.innerHeight + 'px';
+      });
+    }
+
+    if (document.readyState === 'complete') {
+      init();
+    } else {
+      window.addEventListener('load', init);
+    }
+  })();
 </script>
