@@ -53,6 +53,9 @@ const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 2, sizeMax =
     let points: P[] = [];
     const mouse = { x: -9999, y: -9999 };
 
+    // 整页模式铺满视口（fixed 层），hero 模式铺满父容器
+    const isPage = host.classList.contains('particle-page');
+
     const makePoint = (): P => ({
       x: Math.random() * w,
       y: Math.random() * h,
@@ -63,10 +66,17 @@ const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 2, sizeMax =
     });
 
     const resize = () => {
-      const rect = host.getBoundingClientRect();
+      // 整页模式铺满视口，直接取窗口尺寸；
+      // 某些布局下 fixed 容器的 getBoundingClientRect 会给出错误的小值。
+      if (isPage) {
+        w = window.innerWidth;
+        h = window.innerHeight;
+      } else {
+        const rect = host.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+      }
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = rect.width;
-      h = rect.height;
       canvas.width = Math.max(1, Math.floor(w * dpr));
       canvas.height = Math.max(1, Math.floor(h * dpr));
       canvas.style.width = w + 'px';
@@ -150,8 +160,7 @@ const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 2, sizeMax =
 
     window.addEventListener('resize', resize, { passive: true });
 
-    // 整页模式铺满视口，鼠标事件要挂在 window 上（背景层本身 pointer-events:none）
-    const isPage = host.classList.contains('particle-page');
+    // 整页模式鼠标事件要挂在 window 上（背景层本身 pointer-events:none）
     const moveTarget: HTMLElement | Window = isPage ? window : host;
 
     moveTarget.addEventListener('pointermove', (event) => {
