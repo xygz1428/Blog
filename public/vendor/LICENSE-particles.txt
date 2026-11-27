@@ -1,0 +1,9 @@
+particles.js
+============
+Copyright (c) 2015, Vincent Garreau
+Released under the MIT License.
+https://github.com/VincentGarreau/particles.js
+
+The bundled file public/vendor/particles.min.js is the unmodified library.
+public/vendor/particles-config.json contains configuration values only
+(numbers, colours, distances) — configuration is not a copyrightable work.
