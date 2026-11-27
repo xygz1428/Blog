@@ -1669,3 +1669,67 @@ pre.astro-code .copy-btn {
   white-space: nowrap;
   max-width: 24rem;
 }
+/* ── 关于页：去掉文档腔，改成个人语气 ─────────────────── */
+
+.about-page {
+  max-width: 42rem;
+  padding-top: 1rem;
+}
+
+.about-page p {
+  font-size: 1rem;
+  line-height: 1.95;
+  margin: 0 0 1.15rem;
+  color: var(--fg-muted);
+}
+
+.about-greeting {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0 0 1.6rem;
+  color: var(--fg);
+  border: none;
+  padding: 0;
+}
+
+.about-page h2 {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  border: none;
+  padding: 0;
+  margin: 2.6rem 0 0.9rem;
+}
+
+.about-plain {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem;
+}
+
+.about-plain li {
+  position: relative;
+  padding-left: 1.15rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.96rem;
+  line-height: 1.85;
+  color: var(--fg-muted);
+}
+
+.about-plain li::before {
+  content: '·';
+  position: absolute;
+  left: 0.15rem;
+  top: -0.05rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.about-plain strong {
+  color: var(--fg);
+  font-weight: 600;
+}

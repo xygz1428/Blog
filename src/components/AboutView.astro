@@ -10,63 +10,76 @@ interface Props {
 const { locale } = Astro.props;
 const dict = t(locale);
 
+// 需要你替换的占位内容，用【】标出；改完这段就能变成你自己的介绍
 const copy = {
   'zh-cn': {
-    title: '关于',
+    greeting: '你好，我是【你的名字】',
+    doing: '我在做【一句话说清你现在在做什么，比如：某某方向的科研 / 某某方向的前端开发】。',
+    before: '在此之前，【可选：上一段经历或学校，没有就删掉这一行】。',
     intro:
-      '这里是我的个人博客，用来记录科研过程、编程实践、学习笔记，以及一些生活随笔。建站的出发点很简单：把散落在笔记软件、聊天记录和脑子里的东西，整理成能长期检索的形式。',
-    whatTitle: '写什么',
-    items: [
-      ['科研', '论文阅读、实验设计、数据处理与复现中的坑。'],
-      ['技术', '编程语言、工具链、工程实践与踩坑记录。'],
-      ['学习', '课程笔记、方法论、知识整理。'],
-      ['生活', '随笔、杂记，以及一些不一定有用的想法。'],
+      '这个博客记录科研过程、编程实践、学习笔记，以及一些生活随笔。建站的出发点很简单：把散落在笔记软件、聊天记录和脑子里的东西，整理成能长期检索的形式。',
+    believeTitle: '我信这些',
+    believes: [
+      '写下来才算想清楚',
+      '具体比宏大有用',
+      '方法可以学，品味也可以学',
+      '慢一点，但别停',
     ],
-    stackTitle: '关于这个站',
-    stack:
-      '使用 Astro 构建的静态站点，文章用 Markdown 管理，托管在 GitHub Pages 上，推送即自动部署。没有后端、没有数据库、没有追踪脚本——数据全部在 Git 仓库里。',
-    contactTitle: '联系',
-    contact: '可以在 GitHub 找到我，或者通过 RSS 订阅更新。',
+    writeTitle: '我常写',
+    writes: [
+      ['科研', '论文阅读、实验设计、数据处理与复现中的坑'],
+      ['技术', '工具链、工程实践、踩坑记录'],
+      ['学习', '笔记法、复盘、知识整理'],
+      ['生活', '随笔与杂记'],
+    ],
+    contactTitle: '找我',
+    contact: '在 GitHub 上找我，或者用 RSS 订阅。留言写在文章底部。',
   },
   en: {
-    title: 'About',
+    greeting: "Hi, I'm 【your name】",
+    doing: 'Right now I am 【one line about what you do, e.g. research in X / frontend work on Y】.',
+    before: 'Before this, 【optional: previous role or school — delete this line if not needed】.',
     intro:
-      'This is my personal blog: notes on research, engineering practice, study methods, and the occasional essay. The motivation is simple — to turn things scattered across note apps, chat logs and my head into something searchable years later.',
-    whatTitle: 'What I write about',
-    items: [
-      ['Research', 'Paper reading, experiment design, data processing and reproduction pitfalls.'],
-      ['Engineering', 'Languages, toolchains, engineering practice and lessons from bugs.'],
-      ['Learning', 'Course notes, methods, knowledge organisation.'],
-      ['Life', 'Essays and half-formed thoughts.'],
+      'This blog holds research notes, engineering practice, study logs and the occasional essay. The motivation is simple: turn things scattered across note apps, chat logs and my head into something searchable years later.',
+    believeTitle: 'Things I believe',
+    believes: [
+      'Writing it down is how you find out whether you understand it',
+      'Concrete beats grand',
+      'Method is learnable, so is taste',
+      'Slower, but do not stop',
     ],
-    stackTitle: 'About this site',
-    stack:
-      'A static site built with Astro. Posts are Markdown files, hosted on GitHub Pages and deployed automatically on push. No backend, no database, no tracking scripts — everything lives in a Git repository.',
-    contactTitle: 'Contact',
-    contact: 'Find me on GitHub, or subscribe via RSS.',
+    writeTitle: 'What I write about',
+    writes: [
+      ['Research', 'Paper reading, experiment design, data processing, reproduction pitfalls'],
+      ['Engineering', 'Toolchains, practice, lessons from bugs'],
+      ['Learning', 'Note-taking, review, knowledge organisation'],
+      ['Life', 'Essays and fragments'],
+    ],
+    contactTitle: 'Say hi',
+    contact: 'Find me on GitHub, or subscribe via RSS. Comments live at the bottom of each post.',
   },
 } as const;
 
 const c = copy[locale];
 ---
 
-<div class="page-head">
-  <h1>{c.title}</h1>
-  <p>{dict.siteTagline}</p>
-</div>
-
-<div class="wrap-narrow">
+<div class="about-page">
+  <h1 class="about-greeting">{c.greeting}</h1>
+  <p>{c.doing}</p>
+  <p>{c.before}</p>
   <p>{c.intro}</p>
 
-  <h2>{c.whatTitle}</h2>
-  <ul>
-    {c.items.map(([name, desc]) => (
+  <h2>{c.believeTitle}</h2>
+  <ul class="about-plain">
+    {c.believes.map((item) => <li>{item}</li>)}
+  </ul>
+
+  <h2>{c.writeTitle}</h2>
+  <ul class="about-plain">
+    {c.writes.map(([name, desc]) => (
       <li><strong>{name}</strong>：{desc}</li>
     ))}
   </ul>
-
-  <h2>{c.stackTitle}</h2>
-  <p>{c.stack}</p>
 
   <h2>{c.contactTitle}</h2>
   <p>{c.contact}</p>
