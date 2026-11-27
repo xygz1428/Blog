@@ -6,7 +6,8 @@
  * - public/vendor/particles-config.json：配置参数（数值不构成版权作品）
  * - public/vendor/LICENSE-particles.txt：MIT 声明
  */
-const base = import.meta.env.BASE_URL;
+// BASE_URL 不带结尾斜杠，必须自己补，否则会拼成 /Blogvendor/...
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '') + '/';
 ---
 
 <div id="particles-js" class="particles-page" aria-hidden="true"></div>
