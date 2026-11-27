@@ -18,7 +18,7 @@
   --accent: #e2672b;      /* 强调色 */
   --accent-soft: #f9e2d1; /* 强调浅底 */
   --code-bg: #ece6dc;
-  --particle-color: #c9a79b;
+  --particle-color: #b8998c;
 
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --sans: 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -44,7 +44,7 @@
   --accent: #f08a52;
   --accent-soft: #3a2a22;
   --code-bg: #2a2730;
-  --particle-color: #7a6670;
+  --particle-color: #8a7680;
 }
 
 * { box-sizing: border-box; }

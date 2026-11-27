@@ -11,12 +11,15 @@ interface Props {
   linkDistance?: number;
   /** hero = 铺满父容器；page = 固定铺满整个视口（参考站的做法） */
   variant?: 'hero' | 'page';
+  /** 三角形最小/最大边长（px） */
+  sizeMin?: number;
+  sizeMax?: number;
 }
 
-const { count = 12, linkDistance = 150, variant = 'hero' } = Astro.props;
+const { count = 12, linkDistance = 150, variant = 'hero', sizeMin = 3, sizeMax = 9 } = Astro.props;
 ---
 
-<div class:list={["particle-backdrop", `particle-${variant}`]} data-count={count} data-link={linkDistance} aria-hidden="true">
+<div class:list={["particle-backdrop", `particle-${variant}`]} data-count={count} data-link={linkDistance} data-smin={sizeMin} data-smax={sizeMax} aria-hidden="true">
   <canvas></canvas>
 </div>
 
@@ -29,6 +32,8 @@ const { count = 12, linkDistance = 150, variant = 'hero' } = Astro.props;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const COUNT = Number(host.dataset.count ?? 12);
     const LINK = Number(host.dataset.link ?? 150);
+    const SMIN = Number(host.dataset.smin ?? 3);
+    const SMAX = Number(host.dataset.smax ?? 9);
 
     let w = 0;
     let h = 0;
@@ -52,8 +57,8 @@ const { count = 12, linkDistance = 150, variant = 'hero' } = Astro.props;
       y: Math.random() * h,
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
-      size: 2.5 + Math.random() * 3,
-      alpha: 0.25 + Math.random() * 0.5,
+      size: SMIN + Math.random() * (SMAX - SMIN),
+      alpha: 0.35 + Math.random() * 0.45,
     });
 
     const resize = () => {
@@ -115,7 +120,7 @@ const { count = 12, linkDistance = 150, variant = 'hero' } = Astro.props;
           const b2 = points[j];
           const d = Math.hypot(a.x - b2.x, a.y - b2.y);
           if (d < LINK) {
-            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.32 * (1 - d / LINK)})`;
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.42 * (1 - d / LINK)})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b2.x, b2.y);
