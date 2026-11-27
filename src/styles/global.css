@@ -18,7 +18,7 @@
   --accent: #e2672b;      /* 强调色 */
   --accent-soft: #f9e2d1; /* 强调浅底 */
   --code-bg: #ece6dc;
-  --particle-color: #b8998c;
+  --particle-color: #cbb5a8;
 
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --sans: 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -44,7 +44,7 @@
   --accent: #f08a52;
   --accent-soft: #3a2a22;
   --code-bg: #2a2730;
-  --particle-color: #8a7680;
+  --particle-color: #6f5f68;
 }
 
 * { box-sizing: border-box; }
@@ -1789,4 +1789,17 @@ main,
 .about-page {
   position: relative;
   z-index: 1;
+}
+/* 阅读区柔化：中心用纸色盖住粒子，边缘淡出 */
+.particle-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 46% 58% at 50% 42%,
+    var(--bg) 0%,
+    var(--bg) 52%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 78%,
+    transparent 100%
+  );
 }
