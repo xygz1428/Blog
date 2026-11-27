@@ -9,12 +9,14 @@ interface Props {
   count?: number;
   /** 连线距离 */
   linkDistance?: number;
+  /** hero = 铺满父容器；page = 固定铺满整个视口（参考站的做法） */
+  variant?: 'hero' | 'page';
 }
 
-const { count = 12, linkDistance = 150 } = Astro.props;
+const { count = 12, linkDistance = 150, variant = 'hero' } = Astro.props;
 ---
 
-<div class="particle-backdrop" data-count={count} data-link={linkDistance} aria-hidden="true">
+<div class:list={["particle-backdrop", `particle-${variant}`]} data-count={count} data-link={linkDistance} aria-hidden="true">
   <canvas></canvas>
 </div>
 
@@ -142,12 +144,22 @@ const { count = 12, linkDistance = 150 } = Astro.props;
 
     window.addEventListener('resize', resize, { passive: true });
 
-    host.addEventListener('pointermove', (e) => {
-      const rect = host.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+    // 整页模式铺满视口，鼠标事件要挂在 window 上（背景层本身 pointer-events:none）
+    const isPage = host.classList.contains('particle-page');
+    const moveTarget: HTMLElement | Window = isPage ? window : host;
+
+    moveTarget.addEventListener('pointermove', (event) => {
+      const e = event as PointerEvent;
+      if (isPage) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      } else {
+        const rect = host.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      }
     });
-    host.addEventListener('pointerleave', () => {
+    moveTarget.addEventListener('pointerleave', () => {
       mouse.x = -9999;
       mouse.y = -9999;
     });

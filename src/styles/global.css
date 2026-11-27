@@ -1768,3 +1768,25 @@ pre.astro-code .copy-btn {
     display: none;
   }
 }
+/* ── 粒子背景：整页模式（关于页，参考 nathanchen.me）──── */
+
+.particle-page {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 1;
+}
+
+/* 整页粒子之上要有内容层，否则被盖住或点不到 */
+.site-header,
+main,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* 关于页的容器本身不需要再限制层级 */
+.about-page {
+  position: relative;
+  z-index: 1;
+}
