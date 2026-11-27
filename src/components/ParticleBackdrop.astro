@@ -1,0 +1,175 @@
+---
+/**
+ * 粒子背景：三角点 + 连线 + 鼠标排斥。
+ * 参数参考 nathanchen.me 的 particles.js 配置（8 个粒子、连线距离 150、hover=repulse），
+ * 但用原生 canvas 重写，体积从 23 KB 降到 ~2 KB。
+ */
+interface Props {
+  /** 粒子数量 */
+  count?: number;
+  /** 连线距离 */
+  linkDistance?: number;
+}
+
+const { count = 12, linkDistance = 150 } = Astro.props;
+---
+
+<div class="particle-backdrop" data-count={count} data-link={linkDistance} aria-hidden="true">
+  <canvas></canvas>
+</div>
+
+<script>
+  const host = document.querySelector<HTMLElement>('.particle-backdrop');
+  const canvas = host?.querySelector('canvas');
+
+  if (host && canvas) {
+    const ctx = canvas.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const COUNT = Number(host.dataset.count ?? 12);
+    const LINK = Number(host.dataset.link ?? 150);
+
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+    let running = true;
+    let frame = 0;
+
+    // 颜色跟随主题变量，深浅色都能用
+    const readColor = () => {
+      const styles = getComputedStyle(document.documentElement);
+      return styles.getPropertyValue('--particle-color').trim() || '#c8a89a';
+    };
+    let color = readColor();
+
+    type P = { x: number; y: number; vx: number; vy: number; size: number; alpha: number };
+    let points: P[] = [];
+    const mouse = { x: -9999, y: -9999 };
+
+    const makePoint = (): P => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: 2.5 + Math.random() * 3,
+      alpha: 0.25 + Math.random() * 0.5,
+    });
+
+    const resize = () => {
+      const rect = host.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rect.width;
+      h = rect.height;
+      canvas.width = Math.max(1, Math.floor(w * dpr));
+      canvas.height = Math.max(1, Math.floor(h * dpr));
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      points = Array.from({ length: COUNT }, makePoint);
+    };
+
+    const triangle = (x: number, y: number, s: number) => {
+      ctx.beginPath();
+      ctx.moveTo(x, y - s);
+      ctx.lineTo(x + s * 0.9, y + s * 0.7);
+      ctx.lineTo(x - s * 0.9, y + s * 0.7);
+      ctx.closePath();
+      ctx.fill();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      const [r, g, b] = hexToRgb(color);
+
+      // 粒子
+      for (const p of points) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // 鼠标排斥：越近推得越远
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 120 && dist > 0.01) {
+          const force = (120 - dist) / 120;
+          p.x += (dx / dist) * force * 2.2;
+          p.y += (dy / dist) * force * 2.2;
+        }
+
+        // 边界反弹
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        p.x = Math.max(0, Math.min(w, p.x));
+        p.y = Math.max(0, Math.min(h, p.y));
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.alpha})`;
+        triangle(p.x, p.y, p.size);
+      }
+
+      // 连线
+      ctx.lineWidth = 1;
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const a = points[i];
+          const b2 = points[j];
+          const d = Math.hypot(a.x - b2.x, a.y - b2.y);
+          if (d < LINK) {
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.32 * (1 - d / LINK)})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b2.x, b2.y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    function hexToRgb(hex: string): [number, number, number] {
+      const h2 = hex.replace('#', '');
+      const full = h2.length === 3 ? h2.split('').map((c) => c + c).join('') : h2;
+      const n = parseInt(full, 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+
+    const loop = () => {
+      if (!running) return;
+      draw();
+      frame = requestAnimationFrame(loop);
+    };
+
+    resize();
+    draw();
+    if (!reduce) frame = requestAnimationFrame(loop);
+
+    window.addEventListener('resize', resize, { passive: true });
+
+    host.addEventListener('pointermove', (e) => {
+      const rect = host.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    host.addEventListener('pointerleave', () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    });
+
+    // 切到后台就停，省电
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(frame);
+      } else if (!reduce) {
+        running = true;
+        frame = requestAnimationFrame(loop);
+      }
+    });
+
+    // 切主题时重新取色
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn?.addEventListener('click', () => {
+      setTimeout(() => {
+        color = readColor();
+        if (reduce) draw();
+      }, 50);
+    });
+  }
+</script>

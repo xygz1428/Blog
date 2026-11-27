@@ -4,6 +4,7 @@ import { SITE } from '../site.mjs';
 import { getAllPosts, getCategoryCounts, formatDate, postSlug } from '../utils/posts';
 import { getCover } from '../utils/covers';
 import heroImg from '../assets/hero.jpg';
+import ParticleBackdrop from './ParticleBackdrop.astro';
 import { withBase } from '../utils/url';
 import { t, localizedHref, categoryLabel } from '../i18n/utils';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/ui';
@@ -48,6 +49,7 @@ const visibleCategories = isDefault
 ---
 
 <section class="hero">
+  <ParticleBackdrop count={14} linkDistance={160} />
   <div class="hero-text">
     <div class="hero-eyebrow">
       <span>+ A small blog for long thinking</span>

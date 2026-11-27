@@ -18,6 +18,7 @@
   --accent: #e2672b;      /* 强调色 */
   --accent-soft: #f9e2d1; /* 强调浅底 */
   --code-bg: #ece6dc;
+  --particle-color: #c9a79b;
 
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --sans: 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -43,6 +44,7 @@
   --accent: #f08a52;
   --accent-soft: #3a2a22;
   --code-bg: #2a2730;
+  --particle-color: #7a6670;
 }
 
 * { box-sizing: border-box; }
@@ -1732,4 +1734,37 @@ pre.astro-code .copy-btn {
 .about-plain strong {
   color: var(--fg);
   font-weight: 600;
+}
+/* ── 粒子背景（仅首页 hero）──────────────────────────── */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.particle-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  overflow: hidden;
+}
+
+.particle-backdrop canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-text,
+.hero-card {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-backdrop {
+    display: none;
+  }
 }
